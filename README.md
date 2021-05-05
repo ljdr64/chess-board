@@ -1,5 +1,5 @@
-# chess-board
+# Chess-board
 
-## developed by Laureano Rodriguez
+## Developed by Laureano Rodriguez
 
 This is an interactive chess-board proyect
