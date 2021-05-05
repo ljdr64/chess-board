@@ -72,13 +72,13 @@ body {
     border: 0.1rem blue solid;
 }
 
-.iluminateSquare {
+.illuminateSquare {
     display: flex;
     background-color: rgb(70, 128, 70) !important;
     border-radius: 3rem;
 }
 
-.iluminateSquare2 {
+.illuminateSquare2 {
     display: flex;
     align-items: center;
     justify-content: center;
