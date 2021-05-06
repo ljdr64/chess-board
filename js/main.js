@@ -584,7 +584,7 @@ function boxClick(event) {
             if ((movePawnWhite(movePiece1, movePiece2) &&
                     emptySquarePiece()) ||
                 (capturePawnWhite(movePiece1, movePiece2) &&
-                    occupiedSquareBlack())) {
+                    occupiedSquareBlack() && emptySquare('king-black'))) {
                 movePawnWhiteSquare(movePiece1, movePiece2);
                 if (rowNumber(movePiece1, 2) && rowNumber(movePiece2, 4)) {
                     specialMove1 = movePiece1;
@@ -600,19 +600,19 @@ function boxClick(event) {
         }
         if (colorPiece == "knight-white") {
             if (moveKnightWhite(movePiece1, movePiece2) &&
-                emptySquareWhite()) {
+                emptySquareWhite() && emptySquare('king-black')) {
                 moveKnightWhiteSquare(movePiece1, movePiece2);
             }
         }
         if (colorPiece == "bishop-white") {
             if (moveBishopWhite(movePiece1, movePiece2) &&
-                emptySquareWhite()) {
+                emptySquareWhite() && emptySquare('king-black')) {
                 moveBishopWhiteSquare(movePiece1, movePiece2);
             }
         }
         if (colorPiece == "rook-white") {
             if (moveRookWhite(movePiece1, movePiece2) &&
-                emptySquareWhite()) {
+                emptySquareWhite() && emptySquare('king-black')) {
                 moveRookWhiteSquare(movePiece1, movePiece2);
                 if (movePiece1 == 'h1' &&
                     castleWhiteOn) {
@@ -626,13 +626,13 @@ function boxClick(event) {
         }
         if (colorPiece == "queen-white") {
             if (moveQueenWhite(movePiece1, movePiece2) &&
-                emptySquareWhite()) {
+                emptySquareWhite() && emptySquare('king-black')) {
                 moveQueenWhiteSquare(movePiece1, movePiece2);
             }
         }
         if (colorPiece == "king-white") {
             if (moveKingWhite(movePiece1, movePiece2) &&
-                emptySquareWhite()) {
+                emptySquareWhite() && emptySquare('king-black')) {
                 moveKingWhiteSquare(movePiece1, movePiece2);
                 if (movePiece1 == 'e1' &&
                     castleWhiteOn) {
@@ -656,7 +656,7 @@ function boxClick(event) {
             if ((movePawnBlack(movePiece1, movePiece2) &&
                     emptySquarePiece()) ||
                 (capturePawnBlack(movePiece1, movePiece2) &&
-                    occupiedSquareWhite())) {
+                    occupiedSquareWhite() && emptySquare('king-white'))) {
                 movePawnBlackSquare(movePiece1, movePiece2);
                 if (rowNumber(movePiece1, 7) && rowNumber(movePiece2, 5)) {
                     specialMove1 = movePiece1;
@@ -672,19 +672,19 @@ function boxClick(event) {
         }
         if (colorPiece == "knight-black") {
             if (moveKnightBlack(movePiece1, movePiece2) &&
-                emptySquareBlack()) {
+                emptySquareBlack() && emptySquare('king-white')) {
                 moveKnightBlackSquare(movePiece1, movePiece2);
             }
         }
         if (colorPiece == "bishop-black") {
             if (moveBishopBlack(movePiece1, movePiece2) &&
-                emptySquareBlack()) {
+                emptySquareBlack() && emptySquare('king-white')) {
                 moveBishopBlackSquare(movePiece1, movePiece2);
             }
         }
         if (colorPiece == "rook-black") {
             if (moveRookBlack(movePiece1, movePiece2) &&
-                emptySquareBlack()) {
+                emptySquareBlack() && emptySquare('king-white')) {
                 moveRookBlackSquare(movePiece1, movePiece2);
                 if (movePiece1 == 'h8' &&
                     castleBlackOn) {
@@ -698,13 +698,13 @@ function boxClick(event) {
         }
         if (colorPiece == "queen-black") {
             if (moveQueenBlack(movePiece1, movePiece2) &&
-                emptySquareBlack()) {
+                emptySquareBlack() && emptySquare('king-white')) {
                 moveQueenBlackSquare(movePiece1, movePiece2);
             }
         }
         if (colorPiece == "king-black") {
             if (moveKingBlack(movePiece1, movePiece2) &&
-                emptySquareBlack()) {
+                emptySquareBlack() && emptySquare('king-white')) {
                 moveKingBlackSquare(movePiece1, movePiece2);
                 if (movePiece1 == 'e8' &&
                     castleBlackOn) {
