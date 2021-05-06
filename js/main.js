@@ -8,6 +8,12 @@ window.onload = function() {
     }
 }
 
+let kingWhitePosition;
+let kingBlackPosition;
+let kingWhiteBoxesIndice;
+let kingBlackBoxesIndice;
+let whiteInCheck = false;
+let blackInCheck = false;
 let specialMoveOn = false;
 let castleWhiteOn = true;
 let castleBlackOn = true;
@@ -17,9 +23,13 @@ let castleKingsideBlackOn = true;
 let castleQueensideBlackOn = true;
 let movePiece1 = "";
 let movePiece2 = "";
-let colorPiece;
+let colorPiece = "";
 let piece;
+let piece2;
 let color;
+let color2;
+let oppositeColor;
+let oppositeColor2;
 let specialMove1 = "";
 let specialMove2 = "";
 let specialNumberMoves = 0;
@@ -477,90 +487,92 @@ function boxClick(event) {
 
     if (clickedSquares == 0) {
         movePiece1 = squareId
-        event.target.classList.add("activeSquare");
-        event.target.classList.add("activeSquareOne");
+        if (!emptySquarePiece()) {
+            event.target.classList.add("activeSquare");
+            event.target.classList.add("activeSquareOne");
 
-        function illuminateAll() {
+            function illuminateAll() {
 
-            for (let i = 0; i < boxes.length; i++) {
-                if (boxes[i].getElementsByClassName('piece').length == 0 &&
-                    ((((element.className.indexOf('pawn-white') > -1 &&
-                                    (movePawnWhite(movePiece1, boxes[i].id) ||
-                                        (capturePawnWhiteEnPassant(movePiece1, boxes[i].id,
-                                                specialMove1, specialMove2) &&
-                                            numberMoves - specialNumberMoves == 0))) ||
-                                (element.className.indexOf('knight-white') > -1 &&
-                                    moveKnightWhite(movePiece1, boxes[i].id)) ||
-                                (element.className.indexOf('bishop-white') > -1 &&
-                                    moveBishopWhite(movePiece1, boxes[i].id)) ||
-                                (element.className.indexOf('rook-white') > -1 &&
-                                    moveRookWhite(movePiece1, boxes[i].id)) ||
-                                (element.className.indexOf('queen-white') > -1 &&
-                                    moveQueenWhite(movePiece1, boxes[i].id)) ||
-                                (element.className.indexOf('king-white') > -1 &&
-                                    (moveKingWhite(movePiece1, boxes[i].id) ||
-                                        (castleWhiteOn &&
-                                            ((castleKingsideWhiteOn && moveCastleKingsideWhite(movePiece1, boxes[i].id)) ||
-                                                (castleQueensideWhiteOn && moveCastleQueensideWhite(movePiece1, boxes[i].id))))))) &&
-                            occupiedSquareWhite()) ||
-                        (((element.className.indexOf('pawn-black') > -1 &&
-                                    (movePawnBlack(movePiece1, boxes[i].id) ||
-                                        (capturePawnBlackEnPassant(movePiece1, boxes[i].id,
-                                                specialMove1, specialMove2) &&
-                                            numberMoves - specialNumberMoves == 0))) ||
-                                (element.className.indexOf('knight-black') > -1 &&
-                                    moveKnightBlack(movePiece1, boxes[i].id)) ||
-                                (element.className.indexOf('bishop-black') > -1 &&
-                                    moveBishopBlack(movePiece1, boxes[i].id)) ||
-                                (element.className.indexOf('rook-black') > -1 &&
-                                    moveRookBlack(movePiece1, boxes[i].id)) ||
-                                (element.className.indexOf('queen-black') > -1 &&
-                                    moveQueenBlack(movePiece1, boxes[i].id)) ||
-                                (element.className.indexOf('king-black') > -1 &&
-                                    (moveKingBlack(movePiece1, boxes[i].id) ||
-                                        (castleBlackOn &&
-                                            ((castleKingsideBlackOn && moveCastleKingsideBlack(movePiece1, boxes[i].id)) ||
-                                                (castleQueensideBlackOn && moveCastleQueensideBlack(movePiece1, boxes[i].id))))))) &&
-                            occupiedSquareBlack()))) {
-                    boxes[i].classList.add("illuminateSquare");
-                }
-                if (boxes[i].getElementsByClassName('piece').length == 1) {
-                    if ((((element.className.indexOf('pawn-white') > -1 &&
-                                    capturePawnWhite(movePiece1, boxes[i].id)) ||
-                                (element.className.indexOf('knight-white') > -1 &&
-                                    moveKnightWhite(movePiece1, boxes[i].id)) ||
-                                (element.className.indexOf('bishop-white') > -1 &&
-                                    moveBishopWhite(movePiece1, boxes[i].id)) ||
-                                (element.className.indexOf('rook-white') > -1 &&
-                                    moveRookWhite(movePiece1, boxes[i].id)) ||
-                                (element.className.indexOf('queen-white') > -1 &&
-                                    moveQueenWhite(movePiece1, boxes[i].id)) ||
-                                (element.className.indexOf('king-white') > -1 &&
-                                    moveKingWhite(movePiece1, boxes[i].id))) &&
-                            occupiedSquareWhite() &&
-                            boxes[i].getElementsByClassName('piece')[0]
-                            .outerHTML.indexOf("black") !== -1) ||
-                        (((element.className.indexOf('pawn-black') > -1 &&
-                                    capturePawnBlack(movePiece1, boxes[i].id)) ||
-                                (element.className.indexOf('knight-black') > -1 &&
-                                    moveKnightBlack(movePiece1, boxes[i].id)) ||
-                                (element.className.indexOf('bishop-black') > -1 &&
-                                    moveBishopBlack(movePiece1, boxes[i].id)) ||
-                                (element.className.indexOf('rook-black') > -1 &&
-                                    moveRookBlack(movePiece1, boxes[i].id)) ||
-                                (element.className.indexOf('queen-black') > -1 &&
-                                    moveQueenBlack(movePiece1, boxes[i].id)) ||
-                                (element.className.indexOf('king-black') > -1 &&
-                                    moveKingBlack(movePiece1, boxes[i].id))) &&
-                            occupiedSquareBlack() &&
-                            boxes[i].getElementsByClassName('piece')[0]
-                            .outerHTML.indexOf("white") !== -1)) {
-                        boxes[i].classList.add("illuminateSquare2");
+                for (let i = 0; i < boxes.length; i++) {
+                    if (boxes[i].getElementsByClassName('piece').length == 0 &&
+                        ((((element.className.indexOf('pawn-white') > -1 &&
+                                        (movePawnWhite(movePiece1, boxes[i].id) ||
+                                            (capturePawnWhiteEnPassant(movePiece1, boxes[i].id,
+                                                    specialMove1, specialMove2) &&
+                                                numberMoves - specialNumberMoves == 0))) ||
+                                    (element.className.indexOf('knight-white') > -1 &&
+                                        moveKnightWhite(movePiece1, boxes[i].id)) ||
+                                    (element.className.indexOf('bishop-white') > -1 &&
+                                        moveBishopWhite(movePiece1, boxes[i].id)) ||
+                                    (element.className.indexOf('rook-white') > -1 &&
+                                        moveRookWhite(movePiece1, boxes[i].id)) ||
+                                    (element.className.indexOf('queen-white') > -1 &&
+                                        moveQueenWhite(movePiece1, boxes[i].id)) ||
+                                    (element.className.indexOf('king-white') > -1 &&
+                                        (moveKingWhite(movePiece1, boxes[i].id) ||
+                                            (castleWhiteOn &&
+                                                ((castleKingsideWhiteOn && moveCastleKingsideWhite(movePiece1, boxes[i].id)) ||
+                                                    (castleQueensideWhiteOn && moveCastleQueensideWhite(movePiece1, boxes[i].id))))))) &&
+                                occupiedSquareWhite()) ||
+                            (((element.className.indexOf('pawn-black') > -1 &&
+                                        (movePawnBlack(movePiece1, boxes[i].id) ||
+                                            (capturePawnBlackEnPassant(movePiece1, boxes[i].id,
+                                                    specialMove1, specialMove2) &&
+                                                numberMoves - specialNumberMoves == 0))) ||
+                                    (element.className.indexOf('knight-black') > -1 &&
+                                        moveKnightBlack(movePiece1, boxes[i].id)) ||
+                                    (element.className.indexOf('bishop-black') > -1 &&
+                                        moveBishopBlack(movePiece1, boxes[i].id)) ||
+                                    (element.className.indexOf('rook-black') > -1 &&
+                                        moveRookBlack(movePiece1, boxes[i].id)) ||
+                                    (element.className.indexOf('queen-black') > -1 &&
+                                        moveQueenBlack(movePiece1, boxes[i].id)) ||
+                                    (element.className.indexOf('king-black') > -1 &&
+                                        (moveKingBlack(movePiece1, boxes[i].id) ||
+                                            (castleBlackOn &&
+                                                ((castleKingsideBlackOn && moveCastleKingsideBlack(movePiece1, boxes[i].id)) ||
+                                                    (castleQueensideBlackOn && moveCastleQueensideBlack(movePiece1, boxes[i].id))))))) &&
+                                occupiedSquareBlack()))) {
+                        boxes[i].classList.add("illuminateSquare");
+                    }
+                    if (boxes[i].getElementsByClassName('piece').length == 1) {
+                        if ((((element.className.indexOf('pawn-white') > -1 &&
+                                        capturePawnWhite(movePiece1, boxes[i].id)) ||
+                                    (element.className.indexOf('knight-white') > -1 &&
+                                        moveKnightWhite(movePiece1, boxes[i].id)) ||
+                                    (element.className.indexOf('bishop-white') > -1 &&
+                                        moveBishopWhite(movePiece1, boxes[i].id)) ||
+                                    (element.className.indexOf('rook-white') > -1 &&
+                                        moveRookWhite(movePiece1, boxes[i].id)) ||
+                                    (element.className.indexOf('queen-white') > -1 &&
+                                        moveQueenWhite(movePiece1, boxes[i].id)) ||
+                                    (element.className.indexOf('king-white') > -1 &&
+                                        moveKingWhite(movePiece1, boxes[i].id))) &&
+                                occupiedSquareWhite() &&
+                                boxes[i].getElementsByClassName('piece')[0]
+                                .outerHTML.indexOf("black") !== -1) ||
+                            (((element.className.indexOf('pawn-black') > -1 &&
+                                        capturePawnBlack(movePiece1, boxes[i].id)) ||
+                                    (element.className.indexOf('knight-black') > -1 &&
+                                        moveKnightBlack(movePiece1, boxes[i].id)) ||
+                                    (element.className.indexOf('bishop-black') > -1 &&
+                                        moveBishopBlack(movePiece1, boxes[i].id)) ||
+                                    (element.className.indexOf('rook-black') > -1 &&
+                                        moveRookBlack(movePiece1, boxes[i].id)) ||
+                                    (element.className.indexOf('queen-black') > -1 &&
+                                        moveQueenBlack(movePiece1, boxes[i].id)) ||
+                                    (element.className.indexOf('king-black') > -1 &&
+                                        moveKingBlack(movePiece1, boxes[i].id))) &&
+                                occupiedSquareBlack() &&
+                                boxes[i].getElementsByClassName('piece')[0]
+                                .outerHTML.indexOf("white") !== -1)) {
+                            boxes[i].classList.add("illuminateSquare2");
+                        }
                     }
                 }
             }
+            illuminateAll();
         }
-        illuminateAll();
     }
 
     if (clickedSquares == 1) {
@@ -575,6 +587,7 @@ function boxClick(event) {
                 }
                 if (boxes[i].getElementsByClassName('piece').length == 1) {
                     boxes[i].classList.remove("illuminateSquare2");
+                    boxes[i].classList.remove("illuminateSquare3");
                 }
             }
         }
@@ -725,12 +738,112 @@ function boxClick(event) {
             }
         }
 
+        for (let i = 0; i < boxes.length; i++) {
+            if (boxes[i].getElementsByClassName('piece').length == 1) {
+                if (boxes[i].getElementsByClassName('piece')[0]
+                    .outerHTML.indexOf("king-white") !== -1) {
+                    kingWhitePosition = boxes[i].id;
+                    kingWhiteBoxesIndice = i;
+                };
+                if (boxes[i].getElementsByClassName('piece')[0]
+                    .outerHTML.indexOf("king-black") !== -1) {
+                    kingBlackPosition = boxes[i].id;
+                    kingBlackBoxesIndice = i;
+                };
+            }
+        }
+
+        for (let i = 0; i < boxes.length; i++) {
+            if (moveKnightWhite(kingWhitePosition, boxes[i].id) &&
+                boxes[i].getElementsByClassName('piece').length == 1) {
+                if (boxes[i].getElementsByClassName('piece')[0]
+                    .outerHTML.indexOf("knight-black") !== -1) {
+                    boxes[i].classList.add("illuminateSquare3");
+                    boxes[kingWhiteBoxesIndice].classList.add("illuminateSquare3");
+                };
+            }
+            if (moveBishopWhite(kingWhitePosition, boxes[i].id) &&
+                boxes[i].getElementsByClassName('piece').length == 1) {
+                if (boxes[i].getElementsByClassName('piece')[0]
+                    .outerHTML.indexOf("queen-black") !== -1 ||
+                    boxes[i].getElementsByClassName('piece')[0]
+                    .outerHTML.indexOf("bishop-black") !== -1) {
+                    boxes[i].classList.add("illuminateSquare3");
+                    boxes[kingWhiteBoxesIndice].classList.add("illuminateSquare3");
+                };
+            }
+            if (moveRookWhite(kingWhitePosition, boxes[i].id) &&
+                boxes[i].getElementsByClassName('piece').length == 1) {
+                if (boxes[i].getElementsByClassName('piece')[0]
+                    .outerHTML.indexOf("queen-black") !== -1 ||
+                    boxes[i].getElementsByClassName('piece')[0]
+                    .outerHTML.indexOf("rook-black") !== -1) {
+                    boxes[i].classList.add("illuminateSquare3");
+                    boxes[kingWhiteBoxesIndice].classList.add("illuminateSquare3");
+                };
+            }
+            if (capturePawnWhite(kingWhitePosition, boxes[i].id) &&
+                boxes[i].getElementsByClassName('piece').length == 1) {
+                if (boxes[i].getElementsByClassName('piece')[0]
+                    .outerHTML.indexOf("pawn-black") !== -1) {
+                    boxes[i].classList.add("illuminateSquare3");
+                    boxes[kingWhiteBoxesIndice].classList.add("illuminateSquare3");
+                }
+            }
+            if (moveKnightBlack(kingBlackPosition, boxes[i].id) &&
+                boxes[i].getElementsByClassName('piece').length == 1) {
+                if (boxes[i].getElementsByClassName('piece')[0]
+                    .outerHTML.indexOf("knight-white") !== -1) {
+                    boxes[i].classList.add("illuminateSquare3");
+                    boxes[kingBlackBoxesIndice].classList.add("illuminateSquare3");
+                };
+            }
+            if (moveBishopBlack(kingBlackPosition, boxes[i].id) &&
+                boxes[i].getElementsByClassName('piece').length == 1) {
+                if (boxes[i].getElementsByClassName('piece')[0]
+                    .outerHTML.indexOf("queen-white") !== -1 ||
+                    boxes[i].getElementsByClassName('piece')[0]
+                    .outerHTML.indexOf("bishop-white") !== -1) {
+                    boxes[i].classList.add("illuminateSquare3");
+                    boxes[kingBlackBoxesIndice].classList.add("illuminateSquare3");
+                };
+            }
+            if (moveRookBlack(kingBlackPosition, boxes[i].id) &&
+                boxes[i].getElementsByClassName('piece').length == 1) {
+                if (boxes[i].getElementsByClassName('piece')[0]
+                    .outerHTML.indexOf("queen-white") !== -1 ||
+                    boxes[i].getElementsByClassName('piece')[0]
+                    .outerHTML.indexOf("rook-white") !== -1) {
+                    boxes[i].classList.add("illuminateSquare3");
+                    boxes[kingBlackBoxesIndice].classList.add("illuminateSquare3");
+                };
+            }
+            if (capturePawnBlack(kingBlackPosition, boxes[i].id) &&
+                boxes[i].getElementsByClassName('piece').length == 1) {
+                if (boxes[i].getElementsByClassName('piece')[0]
+                    .outerHTML.indexOf("pawn-white") !== -1) {
+                    boxes[i].classList.add("illuminateSquare3");
+                    boxes[kingBlackBoxesIndice].classList.add("illuminateSquare3");
+                }
+            }
+        }
+
+        console.log('colorPiece=> ', colorPiece);
+        console.log('kingWhitePosition=> ', kingWhitePosition);
+        console.log('kingBlackPosition=> ', kingBlackPosition);
+
         event.target.classList.add("activeSquare");
         event.target.classList.add("activeSquareTwo");
         resetClickedBoardPieces();
         resetClickedBoard(movePiece1);
         resetClickedBoard(movePiece2);
         colorPiece = "";
+        piece = "";
+        piece2 = "";
+        color = "";
+        color2 = "";
+        oppositeColor = "";
+        oppositeColor2 = "";
 
         // let castleKingside = [{
         //     '0-0 white=> ': castleKingsideWhiteOn,
@@ -750,106 +863,130 @@ function boxClick(event) {
         // }];
         // console.table(castle);
 
-        console.log("specialMove1=> " + specialMove1 + " specialMove2=> " + specialMove2);
-        console.log("movePiece1=> " + movePiece1 + " movePiece2=> " + movePiece2);
-        console.log("numberMoves=> " + numberMoves + " specialNumberMoves=> " + specialNumberMoves);
-        console.log("emptySquarePiece()=> " + emptySquarePiece());
+        // console.log("specialMove1=> " + specialMove1 + " specialMove2=> " + specialMove2);
+        // console.log("movePiece1=> " + movePiece1 + " movePiece2=> " + movePiece2);
+        // console.log("numberMoves=> " + numberMoves + " specialNumberMoves=> " + specialNumberMoves);
+        // console.log("emptySquarePiece()=> " + emptySquarePiece());
     }
 
-    if (element.className.indexOf('pawn-white') > -1) {
-        // pawn-white
-        console.log('pawn-white');
+    if (element.className.indexOf("pawn-white") > -1) {
         colorPiece = "pawn-white";
         piece = "Pawn";
+        piece2 = "pawn";
         color = "White";
+        color2 = "white";
+        oppositeColor = "Black";
+        oppositeColor2 = "black";
     }
 
-    if (element.className.indexOf('knight-white') > -1) {
-        // knight-white
-        console.log('knight-white');
+    if (element.className.indexOf("knight-white") > -1) {
         colorPiece = "knight-white";
         piece = "Knight";
+        piece2 = "knight";
         color = "White";
+        color2 = "white";
+        oppositeColor = "Black";
+        oppositeColor2 = "black";
     }
 
-    if (element.className.indexOf('bishop-white') > -1) {
-        // knight-white
-        console.log('bishop-white');
+    if (element.className.indexOf("bishop-white") > -1) {
         colorPiece = "bishop-white";
         piece = "Bishop";
+        piece2 = "bishop";
         color = "White";
+        color2 = "white";
+        oppositeColor = "Black";
+        oppositeColor2 = "black";
     }
 
-    if (element.className.indexOf('pawn-black') > -1) {
-        // pawn-black
-        console.log('pawn-black');
-        colorPiece = "pawn-black";
-        piece = "Pawn";
-        color = "Black";
-    }
-
-    if (element.className.indexOf('knight-black') > -1) {
-        // knight-black
-        console.log('knight-black');
-        colorPiece = "knight-black";
-        piece = "Knight";
-        color = "Black";
-    }
-
-    if (element.className.indexOf('bishop-black') > -1) {
-        // knight-white
-        console.log('bishop-black');
-        colorPiece = "bishop-black";
-        piece = "Bishop";
-        color = "Black";
-    }
-
-    if (element.className.indexOf('rook-white') > -1) {
-        // knight-black
-        console.log('rook-white');
+    if (element.className.indexOf("rook-white") > -1) {
         colorPiece = "rook-white";
         piece = "Rook";
+        piece2 = "rook";
         color = "White";
+        color2 = "white";
+        oppositeColor = "Black";
+        oppositeColor2 = "black";
     }
 
-    if (element.className.indexOf('rook-black') > -1) {
-        // knight-black
-        console.log('rook-black');
-        colorPiece = "rook-black";
-        piece = "Rook";
-        color = "Black";
-    }
-
-    if (element.className.indexOf('queen-white') > -1) {
-        // knight-black
-        console.log('queen-white');
+    if (element.className.indexOf("queen-white") > -1) {
         colorPiece = "queen-white";
         piece = "Queen";
+        piece2 = "queen";
         color = "White";
+        color2 = "white";
+        oppositeColor = "Black";
+        oppositeColor2 = "black";
     }
 
-    if (element.className.indexOf('queen-black') > -1) {
-        // knight-black
-        console.log('queen-black');
-        colorPiece = "queen-black";
-        piece = "Queen";
-        color = "Black";
-    }
-
-    if (element.className.indexOf('king-white') > -1) {
-        // knight-black
-        console.log('king-white');
+    if (element.className.indexOf("king-white") > -1) {
         colorPiece = "king-white";
         piece = "King";
+        piece2 = "king";
         color = "White";
+        color2 = "white";
+        oppositeColor = "Black";
+        oppositeColor2 = "black";
     }
 
-    if (element.className.indexOf('king-black') > -1) {
-        // knight-black
-        console.log('king-black');
+    if (element.className.indexOf("pawn-black") > -1) {
+        colorPiece = "pawn-black";
+        piece = "Pawn";
+        piece2 = "pawn";
+        color = "Black";
+        color2 = "black";
+        oppositeColor = "White";
+        oppositeColor2 = "white";
+    }
+
+    if (element.className.indexOf("knight-black") > -1) {
+        colorPiece = "knight-black";
+        piece = "Knight";
+        piece2 = "knight";
+        color = "Black";
+        color2 = "black";
+        oppositeColor = "White";
+        oppositeColor2 = "white";
+    }
+
+    if (element.className.indexOf("bishop-black") > -1) {
+        colorPiece = "bishop-black";
+        piece = "Bishop";
+        piece2 = "bishop";
+        color = "Black";
+        color2 = "black";
+        oppositeColor = "White";
+        oppositeColor2 = "white";
+    }
+
+    if (element.className.indexOf("rook-black") > -1) {
+        colorPiece = "rook-black";
+        piece = "Rook";
+        piece2 = "rook";
+        color = "Black";
+        color2 = "black";
+        oppositeColor = "White";
+        oppositeColor2 = "white";
+    }
+
+    if (element.className.indexOf("queen-black") > -1) {
+        colorPiece = "queen-black";
+        piece = "Queen";
+        piece2 = "queen";
+        color = "Black";
+        color2 = "black";
+        oppositeColor = "White";
+        oppositeColor2 = "white";
+    }
+
+    if (element.className.indexOf("king-black") > -1) {
         colorPiece = "king-black";
         piece = "King";
+        piece2 = "king";
         color = "Black";
+        color2 = "black";
+        oppositeColor = "White";
+        oppositeColor2 = "white";
     }
 }
 

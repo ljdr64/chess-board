@@ -86,6 +86,14 @@ body {
     border-radius: 3rem;
 }
 
+.illuminateSquare3 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(255, 70, 70) !important;
+    border-radius: 3rem;
+}
+
 
 /* pieces */
 
