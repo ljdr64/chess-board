@@ -472,6 +472,31 @@ function boxClick(event) {
         document.getElementById(pieceSquare2).innerHTML = '<div class="piece king-black"></div>';
     }
 
+    function moveIlluminateSquare(pieceSquare1) {
+        document.getElementById(pieceSquare1).innerHTML = '<div class="illuminateSquare"></div>';
+    }
+
+    function moveIlluminateSquare2(pieceSquare1, htmlPieceSquare) {
+        document.getElementById(pieceSquare1).innerHTML =
+            htmlPieceSquare + '<div class="illuminateSquare2"></div>' +
+            '<div class="illuminateSquare3"></div>';
+    }
+
+    function moveIlluminateSquare3(pieceSquare1, htmlPieceSquare) {
+        document.getElementById(pieceSquare1).innerHTML =
+            htmlPieceSquare + '<div class="illuminateSquare4"></div>';
+    }
+
+    function moveActiveSquare1(pieceSquare1, htmlPieceSquare) {
+        document.getElementById(pieceSquare1).innerHTML =
+            htmlPieceSquare + '<div class="activeSquare1"></div>';
+    }
+
+    function moveActiveSquare2(pieceSquare1, htmlPieceSquare) {
+        document.getElementById(pieceSquare1).innerHTML =
+            htmlPieceSquare + '<div class="activeSquare2"></div>';
+    }
+
     let clickedSquares = countClickedSquare();
 
     console.log(numberMoves);
@@ -488,8 +513,14 @@ function boxClick(event) {
     if (clickedSquares == 0) {
         movePiece1 = squareId
         if (!emptySquarePiece()) {
-            event.target.classList.add("activeSquare");
-            event.target.classList.add("activeSquareOne");
+            element.classList.add("activeSquare");
+            if (document.getElementById(movePiece1).outerHTML.indexOf('square-white') !== -1) {
+                moveActiveSquare1(movePiece1, element.outerHTML);
+            };
+            if (document.getElementById(movePiece1).outerHTML.indexOf('square-black') !== -1) {
+                moveActiveSquare2(movePiece1, element.outerHTML);
+            };
+            console.log(element.parentElement);
 
             function illuminateAll() {
 
@@ -533,7 +564,7 @@ function boxClick(event) {
                                                 ((castleKingsideBlackOn && moveCastleKingsideBlack(movePiece1, boxes[i].id)) ||
                                                     (castleQueensideBlackOn && moveCastleQueensideBlack(movePiece1, boxes[i].id))))))) &&
                                 occupiedSquareBlack()))) {
-                        boxes[i].classList.add("illuminateSquare");
+                        moveIlluminateSquare(boxes[i].id);
                     }
                     if (boxes[i].getElementsByClassName('piece').length == 1) {
                         if ((((element.className.indexOf('pawn-white') > -1 &&
@@ -566,7 +597,8 @@ function boxClick(event) {
                                 occupiedSquareBlack() &&
                                 boxes[i].getElementsByClassName('piece')[0]
                                 .outerHTML.indexOf("white") !== -1)) {
-                            boxes[i].classList.add("illuminateSquare2");
+                            moveIlluminateSquare2(boxes[i].id,
+                                boxes[i].getElementsByClassName('piece')[0].outerHTML);
                         }
                     }
                 }
@@ -583,11 +615,11 @@ function boxClick(event) {
 
             for (let i = 0; i < boxes.length; i++) {
                 if (boxes[i].getElementsByClassName('piece').length == 0) {
-                    boxes[i].classList.remove("illuminateSquare");
+                    document.getElementById(boxes[i].id).innerHTML = '';
                 }
                 if (boxes[i].getElementsByClassName('piece').length == 1) {
-                    boxes[i].classList.remove("illuminateSquare2");
-                    boxes[i].classList.remove("illuminateSquare3");
+                    document.getElementById(boxes[i].id).innerHTML = boxes[i].
+                    getElementsByClassName('piece')[0].outerHTML;
                 }
             }
         }
@@ -758,8 +790,11 @@ function boxClick(event) {
                 boxes[i].getElementsByClassName('piece').length == 1) {
                 if (boxes[i].getElementsByClassName('piece')[0]
                     .outerHTML.indexOf("knight-black") !== -1) {
-                    boxes[i].classList.add("illuminateSquare3");
-                    boxes[kingWhiteBoxesIndice].classList.add("illuminateSquare3");
+                    moveIlluminateSquare2(boxes[i].id,
+                        boxes[i].getElementsByClassName('piece')[0].outerHTML);
+                    moveIlluminateSquare3(boxes[kingWhiteBoxesIndice].id,
+                        boxes[kingWhiteBoxesIndice]
+                        .getElementsByClassName('piece')[0].outerHTML);
                 };
             }
             if (moveBishopWhite(kingWhitePosition, boxes[i].id) &&
@@ -768,8 +803,11 @@ function boxClick(event) {
                     .outerHTML.indexOf("queen-black") !== -1 ||
                     boxes[i].getElementsByClassName('piece')[0]
                     .outerHTML.indexOf("bishop-black") !== -1) {
-                    boxes[i].classList.add("illuminateSquare3");
-                    boxes[kingWhiteBoxesIndice].classList.add("illuminateSquare3");
+                    moveIlluminateSquare2(boxes[i].id,
+                        boxes[i].getElementsByClassName('piece')[0].outerHTML);
+                    moveIlluminateSquare3(boxes[kingWhiteBoxesIndice].id,
+                        boxes[kingWhiteBoxesIndice]
+                        .getElementsByClassName('piece')[0].outerHTML);
                 };
             }
             if (moveRookWhite(kingWhitePosition, boxes[i].id) &&
@@ -778,24 +816,33 @@ function boxClick(event) {
                     .outerHTML.indexOf("queen-black") !== -1 ||
                     boxes[i].getElementsByClassName('piece')[0]
                     .outerHTML.indexOf("rook-black") !== -1) {
-                    boxes[i].classList.add("illuminateSquare3");
-                    boxes[kingWhiteBoxesIndice].classList.add("illuminateSquare3");
+                    moveIlluminateSquare2(boxes[i].id,
+                        boxes[i].getElementsByClassName('piece')[0].outerHTML);
+                    moveIlluminateSquare3(boxes[kingWhiteBoxesIndice].id,
+                        boxes[kingWhiteBoxesIndice]
+                        .getElementsByClassName('piece')[0].outerHTML);
                 };
             }
             if (capturePawnWhite(kingWhitePosition, boxes[i].id) &&
                 boxes[i].getElementsByClassName('piece').length == 1) {
                 if (boxes[i].getElementsByClassName('piece')[0]
                     .outerHTML.indexOf("pawn-black") !== -1) {
-                    boxes[i].classList.add("illuminateSquare3");
-                    boxes[kingWhiteBoxesIndice].classList.add("illuminateSquare3");
+                    moveIlluminateSquare2(boxes[i].id,
+                        boxes[i].getElementsByClassName('piece')[0].outerHTML);
+                    moveIlluminateSquare3(boxes[kingWhiteBoxesIndice].id,
+                        boxes[kingWhiteBoxesIndice]
+                        .getElementsByClassName('piece')[0].outerHTML);
                 }
             }
             if (moveKnightBlack(kingBlackPosition, boxes[i].id) &&
                 boxes[i].getElementsByClassName('piece').length == 1) {
                 if (boxes[i].getElementsByClassName('piece')[0]
                     .outerHTML.indexOf("knight-white") !== -1) {
-                    boxes[i].classList.add("illuminateSquare3");
-                    boxes[kingBlackBoxesIndice].classList.add("illuminateSquare3");
+                    moveIlluminateSquare2(boxes[i].id,
+                        boxes[i].getElementsByClassName('piece')[0].outerHTML);
+                    moveIlluminateSquare3(boxes[kingBlackBoxesIndice].id,
+                        boxes[kingBlackBoxesIndice]
+                        .getElementsByClassName('piece')[0].outerHTML);
                 };
             }
             if (moveBishopBlack(kingBlackPosition, boxes[i].id) &&
@@ -804,8 +851,11 @@ function boxClick(event) {
                     .outerHTML.indexOf("queen-white") !== -1 ||
                     boxes[i].getElementsByClassName('piece')[0]
                     .outerHTML.indexOf("bishop-white") !== -1) {
-                    boxes[i].classList.add("illuminateSquare3");
-                    boxes[kingBlackBoxesIndice].classList.add("illuminateSquare3");
+                    moveIlluminateSquare2(boxes[i].id,
+                        boxes[i].getElementsByClassName('piece')[0].outerHTML);
+                    moveIlluminateSquare3(boxes[kingBlackBoxesIndice].id,
+                        boxes[kingBlackBoxesIndice]
+                        .getElementsByClassName('piece')[0].outerHTML);
                 };
             }
             if (moveRookBlack(kingBlackPosition, boxes[i].id) &&
@@ -814,16 +864,22 @@ function boxClick(event) {
                     .outerHTML.indexOf("queen-white") !== -1 ||
                     boxes[i].getElementsByClassName('piece')[0]
                     .outerHTML.indexOf("rook-white") !== -1) {
-                    boxes[i].classList.add("illuminateSquare3");
-                    boxes[kingBlackBoxesIndice].classList.add("illuminateSquare3");
+                    moveIlluminateSquare2(boxes[i].id,
+                        boxes[i].getElementsByClassName('piece')[0].outerHTML);
+                    moveIlluminateSquare3(boxes[kingBlackBoxesIndice].id,
+                        boxes[kingBlackBoxesIndice]
+                        .getElementsByClassName('piece')[0].outerHTML);
                 };
             }
             if (capturePawnBlack(kingBlackPosition, boxes[i].id) &&
                 boxes[i].getElementsByClassName('piece').length == 1) {
                 if (boxes[i].getElementsByClassName('piece')[0]
                     .outerHTML.indexOf("pawn-white") !== -1) {
-                    boxes[i].classList.add("illuminateSquare3");
-                    boxes[kingBlackBoxesIndice].classList.add("illuminateSquare3");
+                    moveIlluminateSquare2(boxes[i].id,
+                        boxes[i].getElementsByClassName('piece')[0].outerHTML);
+                    moveIlluminateSquare3(boxes[kingBlackBoxesIndice].id,
+                        boxes[kingBlackBoxesIndice]
+                        .getElementsByClassName('piece')[0].outerHTML);
                 }
             }
         }
@@ -832,8 +888,8 @@ function boxClick(event) {
         console.log('kingWhitePosition=> ', kingWhitePosition);
         console.log('kingBlackPosition=> ', kingBlackPosition);
 
-        event.target.classList.add("activeSquare");
-        event.target.classList.add("activeSquareTwo");
+        element.classList.add("activeSquare");
+
         resetClickedBoardPieces();
         resetClickedBoard(movePiece1);
         resetClickedBoard(movePiece2);
@@ -993,24 +1049,21 @@ function boxClick(event) {
 function getAllSquare() {
     const boxes = document.getElementsByClassName('box');
     return boxes;
-}
+};
 
 function getAllPieces() {
     const pieces = document.getElementsByClassName('piece');
     return pieces;
-}
-
+};
 
 function countClickedSquare() {
     const nRows = document.getElementsByClassName('activeSquare').length;
     return nRows;
-}
+};
 
 function resetClickedBoardPieces() {
     let pieces = getAllPieces();
     for (let i = 0; i < pieces.length; i++) {
         pieces[i].classList.remove("activeSquare");
-        pieces[i].classList.remove("activeSquareOne");
-        pieces[i].classList.remove("activeSquareTwo");
-    }
+    };
 }
