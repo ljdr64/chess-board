@@ -159,6 +159,503 @@ function pieceIntermediateRow(pieceSquare1, pieceSquare2) {
     return (pieceIntermediate);
 }
 
+function movePawnWhite(pieceSquare1, pieceSquare2) {
+    let pieceSquare3 = pieceSquare1.charAt(0) + 3;
+    if (columnEqual(pieceSquare1, pieceSquare2) &&
+        (rowRealDiference(pieceSquare2, pieceSquare1) == 1 ||
+            (rowNumber(pieceSquare1, 2) &&
+                rowNumber(pieceSquare2, 4) &&
+                !pieceInSquare(pieceSquare3)))) {
+        return (true);
+    }
+    return (false);
+}
+
+function movePawnBlack(pieceSquare1, pieceSquare2) {
+    let pieceSquare3 = pieceSquare1.charAt(0) + 6;
+    if (columnEqual(pieceSquare1, pieceSquare2) &&
+        (rowRealDiference(pieceSquare1, pieceSquare2) == 1 ||
+            (rowNumber(pieceSquare1, 7) &&
+                rowNumber(pieceSquare2, 5) &&
+                !pieceInSquare(pieceSquare3)))) {
+        return (true);
+    }
+    return (false);
+}
+
+function moveKnightWhite(pieceSquare1, pieceSquare2) {
+    if ((columnDiference(pieceSquare1, pieceSquare2, 2) &&
+            rowDiference(pieceSquare1, pieceSquare2, 1)) ||
+        (columnDiference(pieceSquare1, pieceSquare2, 1) &&
+            rowDiference(pieceSquare1, pieceSquare2, 2))) {
+        return (true);
+    }
+    return (false);
+}
+
+function moveKnightBlack(pieceSquare1, pieceSquare2) {
+    if ((columnDiference(pieceSquare1, pieceSquare2, 2) &&
+            rowDiference(pieceSquare1, pieceSquare2, 1)) ||
+        (columnDiference(pieceSquare1, pieceSquare2, 1) &&
+            rowDiference(pieceSquare1, pieceSquare2, 2))) {
+        return (true);
+    }
+    return (false);
+}
+
+function moveBishopWhite(pieceSquare1, pieceSquare2) {
+    if (columnDiferenceNumber(pieceSquare1, pieceSquare2) == rowDiferenceNumber(pieceSquare1, pieceSquare2) &&
+        !pieceIntermediateDiagonal(pieceSquare1, pieceSquare2)) {
+        return (true);
+    }
+    return (false);
+}
+
+function moveBishopBlack(pieceSquare1, pieceSquare2) {
+    if (columnDiferenceNumber(pieceSquare1, pieceSquare2) == rowDiferenceNumber(pieceSquare1, pieceSquare2) &&
+        !pieceIntermediateDiagonal(pieceSquare1, pieceSquare2)) {
+        return (true);
+    }
+    return (false);
+}
+
+function moveRookWhite(pieceSquare1, pieceSquare2) {
+    if ((columnDiferenceNumber(pieceSquare1, pieceSquare2) == 0 &&
+            !pieceIntermediateColumn(pieceSquare1, pieceSquare2)) ||
+        ((rowDiferenceNumber(pieceSquare1, pieceSquare2) == 0) &&
+            !pieceIntermediateRow(pieceSquare1, pieceSquare2))) {
+        return (true);
+    }
+    return (false);
+}
+
+function moveRookBlack(pieceSquare1, pieceSquare2) {
+    if ((columnDiferenceNumber(pieceSquare1, pieceSquare2) == 0 &&
+            !pieceIntermediateColumn(pieceSquare1, pieceSquare2)) ||
+        ((rowDiferenceNumber(pieceSquare1, pieceSquare2) == 0) &&
+            !pieceIntermediateRow(pieceSquare1, pieceSquare2))) {
+        return (true);
+    }
+    return (false);
+}
+
+function moveQueenWhite(pieceSquare1, pieceSquare2) {
+    return (moveRookWhite(pieceSquare1, pieceSquare2) ||
+        moveBishopWhite(pieceSquare1, pieceSquare2));
+}
+
+function moveQueenBlack(pieceSquare1, pieceSquare2) {
+    return (moveRookBlack(pieceSquare1, pieceSquare2) ||
+        moveBishopBlack(pieceSquare1, pieceSquare2));
+}
+
+function moveKingWhite(pieceSquare1, pieceSquare2) {
+    return ((columnDiference(pieceSquare1, pieceSquare2, 1) &&
+            rowDiference(pieceSquare2, pieceSquare1, 1)) ||
+        (columnDiference(pieceSquare1, pieceSquare2, 1) &&
+            rowDiference(pieceSquare2, pieceSquare1, 0)) ||
+        (columnDiference(pieceSquare1, pieceSquare2, 0) &&
+            rowDiference(pieceSquare2, pieceSquare1, 1)));
+}
+
+function moveKingBlack(pieceSquare1, pieceSquare2) {
+    return ((columnDiference(pieceSquare1, pieceSquare2, 1) &&
+            rowDiference(pieceSquare2, pieceSquare1, 1)) ||
+        (columnDiference(pieceSquare1, pieceSquare2, 1) &&
+            rowDiference(pieceSquare2, pieceSquare1, 0)) ||
+        (columnDiference(pieceSquare1, pieceSquare2, 0) &&
+            rowDiference(pieceSquare2, pieceSquare1, 1)));
+}
+
+function capturePawnWhite(pieceSquare1, pieceSquare2) {
+    if (columnAdjacent(pieceSquare1, pieceSquare2) &&
+        rowRealDiference(pieceSquare2, pieceSquare1) == 1) {
+        return (true);
+    }
+    return (false);
+}
+
+function capturePawnBlack(pieceSquare1, pieceSquare2) {
+    if (columnAdjacent(pieceSquare1, pieceSquare2) &&
+        rowRealDiference(pieceSquare1, pieceSquare2) == 1) {
+        return (true);
+    }
+    return (false);
+}
+
+function capturePawnWhiteEnPassant(pieceSquare1, pieceSquare2, specialSquare1, specialSquare2) {
+    if (columnAdjacent(pieceSquare1, pieceSquare2) &&
+        rowRealDiference(pieceSquare2, pieceSquare1) == 1 &&
+        rowEqual(pieceSquare1, specialSquare2) &&
+        columnAdjacent(pieceSquare1, specialSquare2) &&
+        specialSquare1.charAt(1) == 7 &&
+        specialSquare2.charAt(1) == 5 &&
+        columnValorString(pieceSquare2) == columnValorString(specialSquare2)) {
+        return (true);
+    }
+    return (false);
+}
+
+function capturePawnBlackEnPassant(pieceSquare1, pieceSquare2, specialSquare1, specialSquare2) {
+    if (columnAdjacent(pieceSquare1, pieceSquare2) &&
+        rowRealDiference(pieceSquare1, pieceSquare2) == 1 &&
+        rowEqual(pieceSquare1, specialSquare2) &&
+        columnAdjacent(pieceSquare1, specialSquare2) &&
+        specialSquare1.charAt(1) == 2 &&
+        specialSquare2.charAt(1) == 4 &&
+        columnValorString(pieceSquare2) == columnValorString(specialSquare2)) {
+        return (true);
+    }
+    return (false);
+}
+
+function moveCastleKingsideWhite(pieceSquare1, pieceSquare2) {
+    if (pieceSquare1 == 'e1' && pieceSquare2 == 'g1' &&
+        moveRookWhite('h1', 'f1') && moveRookWhite('e1', 'g1') &&
+        boxes[7].getElementsByClassName('piece').length == 1) {
+        if (boxes[7].getElementsByClassName('piece')[0]
+            .outerHTML.indexOf("rook-white") !== -1) {
+            return (true);
+        }
+    }
+    return (false);
+}
+
+function moveCastleQueensideWhite(pieceSquare1, pieceSquare2) {
+    if (pieceSquare1 == 'e1' && pieceSquare2 == 'c1' &&
+        moveRookWhite('a1', 'd1') && moveRookWhite('e1', 'c1') &&
+        boxes[0].getElementsByClassName('piece').length == 1) {
+        if (boxes[0].getElementsByClassName('piece')[0]
+            .outerHTML.indexOf("rook-white") !== -1) {
+            return (true);
+        }
+    }
+    return (false);
+}
+
+function moveCastleKingsideBlack(pieceSquare1, pieceSquare2) {
+    if (pieceSquare1 == 'e8' && pieceSquare2 == 'g8' &&
+        moveRookBlack('h8', 'f8') && moveRookBlack('e8', 'g8') &&
+        boxes[56].getElementsByClassName('piece').length == 1) {
+        if (boxes[56].getElementsByClassName('piece')[0]
+            .outerHTML.indexOf("rook-black") !== -1) {
+            return (true);
+        }
+    }
+    return (false);
+}
+
+function moveCastleQueensideBlack(pieceSquare1, pieceSquare2) {
+    if (pieceSquare1 == 'e8' && pieceSquare2 == 'c8' &&
+        moveRookBlack('a8', 'd8') && moveRookBlack('e8', 'c8') &&
+        boxes[63].getElementsByClassName('piece').length == 1) {
+        if (boxes[63].getElementsByClassName('piece')[0]
+            .outerHTML.indexOf("rook-black") !== -1) {
+            return (true);
+        }
+    }
+    return (false);
+}
+
+function movePawnWhiteSquare(pieceSquare1, pieceSquare2) {
+    document.getElementById(pieceSquare1).innerHTML = '';
+    document.getElementById(pieceSquare2).innerHTML = '<div class="piece pawn-white"></div>';
+}
+
+function moveKnightWhiteSquare(pieceSquare1, pieceSquare2) {
+    document.getElementById(pieceSquare1).innerHTML = '';
+    document.getElementById(pieceSquare2).innerHTML = '<div class="piece knight-white"></div>';
+}
+
+function moveBishopWhiteSquare(pieceSquare1, pieceSquare2) {
+    document.getElementById(pieceSquare1).innerHTML = '';
+    document.getElementById(pieceSquare2).innerHTML = '<div class="piece bishop-white"></div>';
+}
+
+function movePawnBlackSquare(pieceSquare1, pieceSquare2) {
+    document.getElementById(pieceSquare1).innerHTML = '';
+    document.getElementById(pieceSquare2).innerHTML = '<div class="piece pawn-black"></div>';
+}
+
+function moveKnightBlackSquare(pieceSquare1, pieceSquare2) {
+    document.getElementById(pieceSquare1).innerHTML = '';
+    document.getElementById(pieceSquare2).innerHTML = '<div class="piece knight-black"></div>';
+}
+
+function moveBishopBlackSquare(pieceSquare1, pieceSquare2) {
+    document.getElementById(pieceSquare1).innerHTML = '';
+    document.getElementById(pieceSquare2).innerHTML = '<div class="piece bishop-black"></div>';
+}
+
+function moveRookWhiteSquare(pieceSquare1, pieceSquare2) {
+    document.getElementById(pieceSquare1).innerHTML = '';
+    document.getElementById(pieceSquare2).innerHTML = '<div class="piece rook-white"></div>';
+}
+
+function moveRookBlackSquare(pieceSquare1, pieceSquare2) {
+    document.getElementById(pieceSquare1).innerHTML = '';
+    document.getElementById(pieceSquare2).innerHTML = '<div class="piece rook-black"></div>';
+}
+
+function moveQueenWhiteSquare(pieceSquare1, pieceSquare2) {
+    document.getElementById(pieceSquare1).innerHTML = '';
+    document.getElementById(pieceSquare2).innerHTML = '<div class="piece queen-white"></div>';
+}
+
+function moveQueenBlackSquare(pieceSquare1, pieceSquare2) {
+    document.getElementById(pieceSquare1).innerHTML = '';
+    document.getElementById(pieceSquare2).innerHTML = '<div class="piece queen-black"></div>';
+}
+
+function moveKingWhiteSquare(pieceSquare1, pieceSquare2) {
+    document.getElementById(pieceSquare1).innerHTML = '';
+    document.getElementById(pieceSquare2).innerHTML = '<div class="piece king-white"></div>';
+}
+
+function moveKingBlackSquare(pieceSquare1, pieceSquare2) {
+    document.getElementById(pieceSquare1).innerHTML = '';
+    document.getElementById(pieceSquare2).innerHTML = '<div class="piece king-black"></div>';
+}
+
+function moveIlluminateSquare(pieceSquare1) {
+    document.getElementById(pieceSquare1).innerHTML = '<div class="illuminateSquare"></div>';
+}
+
+function moveIlluminateSquare2(pieceSquare1, htmlPieceSquare) {
+    document.getElementById(pieceSquare1).innerHTML =
+        htmlPieceSquare + '<div class="illuminateSquare2"></div>' +
+        '<div class="illuminateSquare3"></div>';
+}
+
+function moveIlluminateSquare3(pieceSquare1, htmlPieceSquare) {
+    document.getElementById(pieceSquare1).innerHTML =
+        htmlPieceSquare + '<div class="illuminateSquare4"></div>';
+}
+
+function moveActiveSquare1(pieceSquare1, htmlPieceSquare) {
+    document.getElementById(pieceSquare1).innerHTML =
+        htmlPieceSquare + '<div class="activeSquare1"></div>';
+}
+
+function moveActiveSquare2(pieceSquare1, htmlPieceSquare) {
+    document.getElementById(pieceSquare1).innerHTML =
+        htmlPieceSquare + '<div class="activeSquare2"></div>';
+}
+
+function kingsOnCheck() {
+    for (let i = 0; i < boxes.length; i++) {
+        if (boxes[i].getElementsByClassName('piece').length == 1) {
+            if (boxes[i].getElementsByClassName('piece')[0]
+                .outerHTML.indexOf("king-white") !== -1) {
+                kingWhitePosition = boxes[i].id;
+                kingWhiteBoxesIndice = i;
+            };
+            if (boxes[i].getElementsByClassName('piece')[0]
+                .outerHTML.indexOf("king-black") !== -1) {
+                kingBlackPosition = boxes[i].id;
+                kingBlackBoxesIndice = i;
+            };
+        }
+    }
+
+    for (let i = 0; i < boxes.length; i++) {
+        if (moveKnightWhite(kingWhitePosition, boxes[i].id) &&
+            boxes[i].getElementsByClassName('piece').length == 1) {
+            if (boxes[i].getElementsByClassName('piece')[0]
+                .outerHTML.indexOf("knight-black") !== -1) {
+                moveIlluminateSquare2(boxes[i].id,
+                    boxes[i].getElementsByClassName('piece')[0].outerHTML);
+                moveIlluminateSquare3(boxes[kingWhiteBoxesIndice].id,
+                    boxes[kingWhiteBoxesIndice]
+                    .getElementsByClassName('piece')[0].outerHTML);
+                whiteInCheck = true;
+            };
+        }
+        if (moveBishopWhite(kingWhitePosition, boxes[i].id) &&
+            boxes[i].getElementsByClassName('piece').length == 1) {
+            if (boxes[i].getElementsByClassName('piece')[0]
+                .outerHTML.indexOf("queen-black") !== -1 ||
+                boxes[i].getElementsByClassName('piece')[0]
+                .outerHTML.indexOf("bishop-black") !== -1) {
+                moveIlluminateSquare2(boxes[i].id,
+                    boxes[i].getElementsByClassName('piece')[0].outerHTML);
+                moveIlluminateSquare3(boxes[kingWhiteBoxesIndice].id,
+                    boxes[kingWhiteBoxesIndice]
+                    .getElementsByClassName('piece')[0].outerHTML);
+                whiteInCheck = true;
+            };
+        }
+        if (moveRookWhite(kingWhitePosition, boxes[i].id) &&
+            boxes[i].getElementsByClassName('piece').length == 1) {
+            if (boxes[i].getElementsByClassName('piece')[0]
+                .outerHTML.indexOf("queen-black") !== -1 ||
+                boxes[i].getElementsByClassName('piece')[0]
+                .outerHTML.indexOf("rook-black") !== -1) {
+                moveIlluminateSquare2(boxes[i].id,
+                    boxes[i].getElementsByClassName('piece')[0].outerHTML);
+                moveIlluminateSquare3(boxes[kingWhiteBoxesIndice].id,
+                    boxes[kingWhiteBoxesIndice]
+                    .getElementsByClassName('piece')[0].outerHTML);
+                whiteInCheck = true;
+            };
+        }
+        if (capturePawnWhite(kingWhitePosition, boxes[i].id) &&
+            boxes[i].getElementsByClassName('piece').length == 1) {
+            if (boxes[i].getElementsByClassName('piece')[0]
+                .outerHTML.indexOf("pawn-black") !== -1) {
+                moveIlluminateSquare2(boxes[i].id,
+                    boxes[i].getElementsByClassName('piece')[0].outerHTML);
+                moveIlluminateSquare3(boxes[kingWhiteBoxesIndice].id,
+                    boxes[kingWhiteBoxesIndice]
+                    .getElementsByClassName('piece')[0].outerHTML);
+                whiteInCheck = true;
+            }
+        }
+        if (moveKnightBlack(kingBlackPosition, boxes[i].id) &&
+            boxes[i].getElementsByClassName('piece').length == 1) {
+            if (boxes[i].getElementsByClassName('piece')[0]
+                .outerHTML.indexOf("knight-white") !== -1) {
+                moveIlluminateSquare2(boxes[i].id,
+                    boxes[i].getElementsByClassName('piece')[0].outerHTML);
+                moveIlluminateSquare3(boxes[kingBlackBoxesIndice].id,
+                    boxes[kingBlackBoxesIndice]
+                    .getElementsByClassName('piece')[0].outerHTML);
+                blackInCheck = true;
+            };
+        }
+        if (moveBishopBlack(kingBlackPosition, boxes[i].id) &&
+            boxes[i].getElementsByClassName('piece').length == 1) {
+            if (boxes[i].getElementsByClassName('piece')[0]
+                .outerHTML.indexOf("queen-white") !== -1 ||
+                boxes[i].getElementsByClassName('piece')[0]
+                .outerHTML.indexOf("bishop-white") !== -1) {
+                moveIlluminateSquare2(boxes[i].id,
+                    boxes[i].getElementsByClassName('piece')[0].outerHTML);
+                moveIlluminateSquare3(boxes[kingBlackBoxesIndice].id,
+                    boxes[kingBlackBoxesIndice]
+                    .getElementsByClassName('piece')[0].outerHTML);
+                blackInCheck = true;
+            };
+        }
+        if (moveRookBlack(kingBlackPosition, boxes[i].id) &&
+            boxes[i].getElementsByClassName('piece').length == 1) {
+            if (boxes[i].getElementsByClassName('piece')[0]
+                .outerHTML.indexOf("queen-white") !== -1 ||
+                boxes[i].getElementsByClassName('piece')[0]
+                .outerHTML.indexOf("rook-white") !== -1) {
+                moveIlluminateSquare2(boxes[i].id,
+                    boxes[i].getElementsByClassName('piece')[0].outerHTML);
+                moveIlluminateSquare3(boxes[kingBlackBoxesIndice].id,
+                    boxes[kingBlackBoxesIndice]
+                    .getElementsByClassName('piece')[0].outerHTML);
+                blackInCheck = true;
+            };
+        }
+        if (capturePawnBlack(kingBlackPosition, boxes[i].id) &&
+            boxes[i].getElementsByClassName('piece').length == 1) {
+            if (boxes[i].getElementsByClassName('piece')[0]
+                .outerHTML.indexOf("pawn-white") !== -1) {
+                moveIlluminateSquare2(boxes[i].id,
+                    boxes[i].getElementsByClassName('piece')[0].outerHTML);
+                moveIlluminateSquare3(boxes[kingBlackBoxesIndice].id,
+                    boxes[kingBlackBoxesIndice]
+                    .getElementsByClassName('piece')[0].outerHTML);
+                blackInCheck = true;
+            }
+        }
+    }
+}
+
+function kingWhiteOnCheck(pieceSquare1) {
+    for (let i = 0; i < boxes.length; i++) {
+        if (moveKingWhite(pieceSquare1, boxes[i].id) &&
+            boxes[i].getElementsByClassName('piece').length == 1) {
+            if (boxes[i].getElementsByClassName('piece')[0]
+                .outerHTML.indexOf("king-black") !== -1) {
+                return true;
+            };
+        }
+        if (moveKnightWhite(pieceSquare1, boxes[i].id) &&
+            boxes[i].getElementsByClassName('piece').length == 1) {
+            if (boxes[i].getElementsByClassName('piece')[0]
+                .outerHTML.indexOf("knight-black") !== -1) {
+                return true;
+            };
+        }
+        // if (moveBishopWhite(pieceSquare1, boxes[i].id) &&
+        //     boxes[i].getElementsByClassName('piece').length == 1) {
+        //     if (boxes[i].getElementsByClassName('piece')[0]
+        //         .outerHTML.indexOf("queen-black") !== -1 ||
+        //         boxes[i].getElementsByClassName('piece')[0]
+        //         .outerHTML.indexOf("bishop-black") !== -1) {
+        //         return true;
+        //     };
+        // }
+        // if (moveRookWhite(pieceSquare1, boxes[i].id) &&
+        //     boxes[i].getElementsByClassName('piece').length == 1) {
+        //     if (boxes[i].getElementsByClassName('piece')[0]
+        //         .outerHTML.indexOf("queen-black") !== -1 ||
+        //         boxes[i].getElementsByClassName('piece')[0]
+        //         .outerHTML.indexOf("rook-black") !== -1) {
+        //         return true;
+        //     };
+        // }
+        if (capturePawnWhite(pieceSquare1, boxes[i].id) &&
+            boxes[i].getElementsByClassName('piece').length == 1) {
+            if (boxes[i].getElementsByClassName('piece')[0]
+                .outerHTML.indexOf("pawn-black") !== -1) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+function kingBlackOnCheck(pieceSquare1) {
+    for (let i = 0; i < boxes.length; i++) {
+        if (moveKingBlack(pieceSquare1, boxes[i].id) &&
+            boxes[i].getElementsByClassName('piece').length == 1) {
+            if (boxes[i].getElementsByClassName('piece')[0]
+                .outerHTML.indexOf("king-white") !== -1) {
+                return true;
+            };
+        }
+        if (moveKnightBlack(pieceSquare1, boxes[i].id) &&
+            boxes[i].getElementsByClassName('piece').length == 1) {
+            if (boxes[i].getElementsByClassName('piece')[0]
+                .outerHTML.indexOf("knight-white") !== -1) {
+                return true;
+            };
+        }
+        // if (moveBishopBlack(pieceSquare1, boxes[i].id) &&
+        //     boxes[i].getElementsByClassName('piece').length == 1) {
+        //     if (boxes[i].getElementsByClassName('piece')[0]
+        //         .outerHTML.indexOf("queen-white") !== -1 ||
+        //         boxes[i].getElementsByClassName('piece')[0]
+        //         .outerHTML.indexOf("bishop-white") !== -1) {
+        //         return true;
+        //     };
+        // }
+        // if (moveRookBlack(pieceSquare1, boxes[i].id) &&
+        //     boxes[i].getElementsByClassName('piece').length == 1) {
+        //     if (boxes[i].getElementsByClassName('piece')[0]
+        //         .outerHTML.indexOf("queen-white") !== -1 ||
+        //         boxes[i].getElementsByClassName('piece')[0]
+        //         .outerHTML.indexOf("rook-white") !== -1) {
+        //         return true;
+        //     };
+        // }
+        if (capturePawnBlack(pieceSquare1, boxes[i].id) &&
+            boxes[i].getElementsByClassName('piece').length == 1) {
+            if (boxes[i].getElementsByClassName('piece')[0]
+                .outerHTML.indexOf("pawn-white") !== -1) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 function boxClick(event) {
 
     const element = event.target;
@@ -214,289 +711,6 @@ function boxClick(event) {
         return (emptySquare('piece'));
     }
 
-    function movePawnWhite(pieceSquare1, pieceSquare2) {
-        let pieceSquare3 = pieceSquare1.charAt(0) + 3;
-        if (columnEqual(pieceSquare1, pieceSquare2) &&
-            (rowRealDiference(pieceSquare2, pieceSquare1) == 1 ||
-                (rowNumber(pieceSquare1, 2) &&
-                    rowNumber(pieceSquare2, 4) &&
-                    !pieceInSquare(pieceSquare3)))) {
-            return (true);
-        }
-        return (false);
-    }
-
-    function movePawnBlack(pieceSquare1, pieceSquare2) {
-        let pieceSquare3 = pieceSquare1.charAt(0) + 6;
-        if (columnEqual(pieceSquare1, pieceSquare2) &&
-            (rowRealDiference(pieceSquare1, pieceSquare2) == 1 ||
-                (rowNumber(pieceSquare1, 7) &&
-                    rowNumber(pieceSquare2, 5) &&
-                    !pieceInSquare(pieceSquare3)))) {
-            return (true);
-        }
-        return (false);
-    }
-
-    function moveKnightWhite(pieceSquare1, pieceSquare2) {
-        if ((columnDiference(pieceSquare1, pieceSquare2, 2) &&
-                rowDiference(pieceSquare1, pieceSquare2, 1)) ||
-            (columnDiference(pieceSquare1, pieceSquare2, 1) &&
-                rowDiference(pieceSquare1, pieceSquare2, 2))) {
-            return (true);
-        }
-        return (false);
-    }
-
-    function moveKnightBlack(pieceSquare1, pieceSquare2) {
-        if ((columnDiference(pieceSquare1, pieceSquare2, 2) &&
-                rowDiference(pieceSquare1, pieceSquare2, 1)) ||
-            (columnDiference(pieceSquare1, pieceSquare2, 1) &&
-                rowDiference(pieceSquare1, pieceSquare2, 2))) {
-            return (true);
-        }
-        return (false);
-    }
-
-    function moveBishopWhite(pieceSquare1, pieceSquare2) {
-        if (columnDiferenceNumber(pieceSquare1, pieceSquare2) == rowDiferenceNumber(pieceSquare1, pieceSquare2) &&
-            !pieceIntermediateDiagonal(pieceSquare1, pieceSquare2)) {
-            return (true);
-        }
-        return (false);
-    }
-
-    function moveBishopBlack(pieceSquare1, pieceSquare2) {
-        if (columnDiferenceNumber(pieceSquare1, pieceSquare2) == rowDiferenceNumber(pieceSquare1, pieceSquare2) &&
-            !pieceIntermediateDiagonal(pieceSquare1, pieceSquare2)) {
-            return (true);
-        }
-        return (false);
-    }
-
-    function moveRookWhite(pieceSquare1, pieceSquare2) {
-        if ((columnDiferenceNumber(pieceSquare1, pieceSquare2) == 0 &&
-                !pieceIntermediateColumn(pieceSquare1, pieceSquare2)) ||
-            ((rowDiferenceNumber(pieceSquare1, pieceSquare2) == 0) &&
-                !pieceIntermediateRow(pieceSquare1, pieceSquare2))) {
-            return (true);
-        }
-        return (false);
-    }
-
-    function moveRookBlack(pieceSquare1, pieceSquare2) {
-        if ((columnDiferenceNumber(pieceSquare1, pieceSquare2) == 0 &&
-                !pieceIntermediateColumn(pieceSquare1, pieceSquare2)) ||
-            ((rowDiferenceNumber(pieceSquare1, pieceSquare2) == 0) &&
-                !pieceIntermediateRow(pieceSquare1, pieceSquare2))) {
-            return (true);
-        }
-        return (false);
-    }
-
-    function moveQueenWhite(pieceSquare1, pieceSquare2) {
-        return (moveRookWhite(pieceSquare1, pieceSquare2) ||
-            moveBishopWhite(pieceSquare1, pieceSquare2));
-    }
-
-    function moveQueenBlack(pieceSquare1, pieceSquare2) {
-        return (moveRookBlack(pieceSquare1, pieceSquare2) ||
-            moveBishopBlack(pieceSquare1, pieceSquare2));
-    }
-
-    function moveKingWhite(pieceSquare1, pieceSquare2) {
-        return ((columnDiference(pieceSquare1, pieceSquare2, 1) &&
-                rowDiference(pieceSquare2, pieceSquare1, 1)) ||
-            (columnDiference(pieceSquare1, pieceSquare2, 1) &&
-                rowDiference(pieceSquare2, pieceSquare1, 0)) ||
-            (columnDiference(pieceSquare1, pieceSquare2, 0) &&
-                rowDiference(pieceSquare2, pieceSquare1, 1)));
-    }
-
-    function moveKingBlack(pieceSquare1, pieceSquare2) {
-        return ((columnDiference(pieceSquare1, pieceSquare2, 1) &&
-                rowDiference(pieceSquare2, pieceSquare1, 1)) ||
-            (columnDiference(pieceSquare1, pieceSquare2, 1) &&
-                rowDiference(pieceSquare2, pieceSquare1, 0)) ||
-            (columnDiference(pieceSquare1, pieceSquare2, 0) &&
-                rowDiference(pieceSquare2, pieceSquare1, 1)));
-    }
-
-    function capturePawnWhite(pieceSquare1, pieceSquare2) {
-        if (columnAdjacent(pieceSquare1, pieceSquare2) &&
-            rowRealDiference(pieceSquare2, pieceSquare1) == 1) {
-            return (true);
-        }
-        return (false);
-    }
-
-    function capturePawnBlack(pieceSquare1, pieceSquare2) {
-        if (columnAdjacent(pieceSquare1, pieceSquare2) &&
-            rowRealDiference(pieceSquare1, pieceSquare2) == 1) {
-            return (true);
-        }
-        return (false);
-    }
-
-    function capturePawnWhiteEnPassant(pieceSquare1, pieceSquare2, specialSquare1, specialSquare2) {
-        if (columnAdjacent(pieceSquare1, pieceSquare2) &&
-            rowRealDiference(pieceSquare2, pieceSquare1) == 1 &&
-            rowEqual(pieceSquare1, specialSquare2) &&
-            columnAdjacent(pieceSquare1, specialSquare2) &&
-            specialSquare1.charAt(1) == 7 &&
-            specialSquare2.charAt(1) == 5 &&
-            columnValorString(pieceSquare2) == columnValorString(specialSquare2)) {
-            return (true);
-        }
-        return (false);
-    }
-
-    function capturePawnBlackEnPassant(pieceSquare1, pieceSquare2, specialSquare1, specialSquare2) {
-        if (columnAdjacent(pieceSquare1, pieceSquare2) &&
-            rowRealDiference(pieceSquare1, pieceSquare2) == 1 &&
-            rowEqual(pieceSquare1, specialSquare2) &&
-            columnAdjacent(pieceSquare1, specialSquare2) &&
-            specialSquare1.charAt(1) == 2 &&
-            specialSquare2.charAt(1) == 4 &&
-            columnValorString(pieceSquare2) == columnValorString(specialSquare2)) {
-            return (true);
-        }
-        return (false);
-    }
-
-    function moveCastleKingsideWhite(pieceSquare1, pieceSquare2) {
-        if (pieceSquare1 == 'e1' && pieceSquare2 == 'g1' &&
-            moveRookWhite('h1', 'f1') && moveRookWhite('e1', 'g1') &&
-            boxes[7].getElementsByClassName('piece').length == 1) {
-            if (boxes[7].getElementsByClassName('piece')[0]
-                .outerHTML.indexOf("rook-white") !== -1) {
-                return (true);
-            }
-        }
-        return (false);
-    }
-
-    function moveCastleQueensideWhite(pieceSquare1, pieceSquare2) {
-        if (pieceSquare1 == 'e1' && pieceSquare2 == 'c1' &&
-            moveRookWhite('a1', 'd1') && moveRookWhite('e1', 'c1') &&
-            boxes[0].getElementsByClassName('piece').length == 1) {
-            if (boxes[0].getElementsByClassName('piece')[0]
-                .outerHTML.indexOf("rook-white") !== -1) {
-                return (true);
-            }
-        }
-        return (false);
-    }
-
-    function moveCastleKingsideBlack(pieceSquare1, pieceSquare2) {
-        if (pieceSquare1 == 'e8' && pieceSquare2 == 'g8' &&
-            moveRookBlack('h8', 'f8') && moveRookBlack('e8', 'g8') &&
-            boxes[56].getElementsByClassName('piece').length == 1) {
-            if (boxes[56].getElementsByClassName('piece')[0]
-                .outerHTML.indexOf("rook-black") !== -1) {
-                return (true);
-            }
-        }
-        return (false);
-    }
-
-    function moveCastleQueensideBlack(pieceSquare1, pieceSquare2) {
-        if (pieceSquare1 == 'e8' && pieceSquare2 == 'c8' &&
-            moveRookBlack('a8', 'd8') && moveRookBlack('e8', 'c8') &&
-            boxes[63].getElementsByClassName('piece').length == 1) {
-            if (boxes[63].getElementsByClassName('piece')[0]
-                .outerHTML.indexOf("rook-black") !== -1) {
-                return (true);
-            }
-        }
-        return (false);
-    }
-
-    function movePawnWhiteSquare(pieceSquare1, pieceSquare2) {
-        document.getElementById(pieceSquare1).innerHTML = '';
-        document.getElementById(pieceSquare2).innerHTML = '<div class="piece pawn-white"></div>';
-    }
-
-    function moveKnightWhiteSquare(pieceSquare1, pieceSquare2) {
-        document.getElementById(pieceSquare1).innerHTML = '';
-        document.getElementById(pieceSquare2).innerHTML = '<div class="piece knight-white"></div>';
-    }
-
-    function moveBishopWhiteSquare(pieceSquare1, pieceSquare2) {
-        document.getElementById(pieceSquare1).innerHTML = '';
-        document.getElementById(pieceSquare2).innerHTML = '<div class="piece bishop-white"></div>';
-    }
-
-    function movePawnBlackSquare(pieceSquare1, pieceSquare2) {
-        document.getElementById(pieceSquare1).innerHTML = '';
-        document.getElementById(pieceSquare2).innerHTML = '<div class="piece pawn-black"></div>';
-    }
-
-    function moveKnightBlackSquare(pieceSquare1, pieceSquare2) {
-        document.getElementById(pieceSquare1).innerHTML = '';
-        document.getElementById(pieceSquare2).innerHTML = '<div class="piece knight-black"></div>';
-    }
-
-    function moveBishopBlackSquare(pieceSquare1, pieceSquare2) {
-        document.getElementById(pieceSquare1).innerHTML = '';
-        document.getElementById(pieceSquare2).innerHTML = '<div class="piece bishop-black"></div>';
-    }
-
-    function moveRookWhiteSquare(pieceSquare1, pieceSquare2) {
-        document.getElementById(pieceSquare1).innerHTML = '';
-        document.getElementById(pieceSquare2).innerHTML = '<div class="piece rook-white"></div>';
-    }
-
-    function moveRookBlackSquare(pieceSquare1, pieceSquare2) {
-        document.getElementById(pieceSquare1).innerHTML = '';
-        document.getElementById(pieceSquare2).innerHTML = '<div class="piece rook-black"></div>';
-    }
-
-    function moveQueenWhiteSquare(pieceSquare1, pieceSquare2) {
-        document.getElementById(pieceSquare1).innerHTML = '';
-        document.getElementById(pieceSquare2).innerHTML = '<div class="piece queen-white"></div>';
-    }
-
-    function moveQueenBlackSquare(pieceSquare1, pieceSquare2) {
-        document.getElementById(pieceSquare1).innerHTML = '';
-        document.getElementById(pieceSquare2).innerHTML = '<div class="piece queen-black"></div>';
-    }
-
-    function moveKingWhiteSquare(pieceSquare1, pieceSquare2) {
-        document.getElementById(pieceSquare1).innerHTML = '';
-        document.getElementById(pieceSquare2).innerHTML = '<div class="piece king-white"></div>';
-    }
-
-    function moveKingBlackSquare(pieceSquare1, pieceSquare2) {
-        document.getElementById(pieceSquare1).innerHTML = '';
-        document.getElementById(pieceSquare2).innerHTML = '<div class="piece king-black"></div>';
-    }
-
-    function moveIlluminateSquare(pieceSquare1) {
-        document.getElementById(pieceSquare1).innerHTML = '<div class="illuminateSquare"></div>';
-    }
-
-    function moveIlluminateSquare2(pieceSquare1, htmlPieceSquare) {
-        document.getElementById(pieceSquare1).innerHTML =
-            htmlPieceSquare + '<div class="illuminateSquare2"></div>' +
-            '<div class="illuminateSquare3"></div>';
-    }
-
-    function moveIlluminateSquare3(pieceSquare1, htmlPieceSquare) {
-        document.getElementById(pieceSquare1).innerHTML =
-            htmlPieceSquare + '<div class="illuminateSquare4"></div>';
-    }
-
-    function moveActiveSquare1(pieceSquare1, htmlPieceSquare) {
-        document.getElementById(pieceSquare1).innerHTML =
-            htmlPieceSquare + '<div class="activeSquare1"></div>';
-    }
-
-    function moveActiveSquare2(pieceSquare1, htmlPieceSquare) {
-        document.getElementById(pieceSquare1).innerHTML =
-            htmlPieceSquare + '<div class="activeSquare2"></div>';
-    }
-
     let clickedSquares = countClickedSquare();
 
     console.log(numberMoves);
@@ -540,6 +754,7 @@ function boxClick(event) {
                                     (element.className.indexOf('queen-white') > -1 &&
                                         moveQueenWhite(movePiece1, boxes[i].id)) ||
                                     (element.className.indexOf('king-white') > -1 &&
+                                        !kingWhiteOnCheck(boxes[i].id) &&
                                         (moveKingWhite(movePiece1, boxes[i].id) ||
                                             (castleWhiteOn &&
                                                 ((castleKingsideWhiteOn && moveCastleKingsideWhite(movePiece1, boxes[i].id)) ||
@@ -559,6 +774,7 @@ function boxClick(event) {
                                     (element.className.indexOf('queen-black') > -1 &&
                                         moveQueenBlack(movePiece1, boxes[i].id)) ||
                                     (element.className.indexOf('king-black') > -1 &&
+                                        !kingBlackOnCheck(boxes[i].id) &&
                                         (moveKingBlack(movePiece1, boxes[i].id) ||
                                             (castleBlackOn &&
                                                 ((castleKingsideBlackOn && moveCastleKingsideBlack(movePiece1, boxes[i].id)) ||
@@ -677,7 +893,8 @@ function boxClick(event) {
         }
         if (colorPiece == "king-white") {
             if (moveKingWhite(movePiece1, movePiece2) &&
-                emptySquareWhite() && emptySquare('king-black')) {
+                emptySquareWhite() && emptySquare('king-black') &&
+                !kingWhiteOnCheck(movePiece2)) {
                 moveKingWhiteSquare(movePiece1, movePiece2);
                 if (movePiece1 == 'e1' &&
                     castleWhiteOn) {
@@ -749,7 +966,8 @@ function boxClick(event) {
         }
         if (colorPiece == "king-black") {
             if (moveKingBlack(movePiece1, movePiece2) &&
-                emptySquareBlack() && emptySquare('king-white')) {
+                emptySquareBlack() && emptySquare('king-white') &&
+                !kingBlackOnCheck(movePiece2)) {
                 moveKingBlackSquare(movePiece1, movePiece2);
                 if (movePiece1 == 'e8' &&
                     castleBlackOn) {
@@ -770,129 +988,22 @@ function boxClick(event) {
             }
         }
 
-        for (let i = 0; i < boxes.length; i++) {
-            if (boxes[i].getElementsByClassName('piece').length == 1) {
-                if (boxes[i].getElementsByClassName('piece')[0]
-                    .outerHTML.indexOf("king-white") !== -1) {
-                    kingWhitePosition = boxes[i].id;
-                    kingWhiteBoxesIndice = i;
-                };
-                if (boxes[i].getElementsByClassName('piece')[0]
-                    .outerHTML.indexOf("king-black") !== -1) {
-                    kingBlackPosition = boxes[i].id;
-                    kingBlackBoxesIndice = i;
-                };
-            }
-        }
-
-        for (let i = 0; i < boxes.length; i++) {
-            if (moveKnightWhite(kingWhitePosition, boxes[i].id) &&
-                boxes[i].getElementsByClassName('piece').length == 1) {
-                if (boxes[i].getElementsByClassName('piece')[0]
-                    .outerHTML.indexOf("knight-black") !== -1) {
-                    moveIlluminateSquare2(boxes[i].id,
-                        boxes[i].getElementsByClassName('piece')[0].outerHTML);
-                    moveIlluminateSquare3(boxes[kingWhiteBoxesIndice].id,
-                        boxes[kingWhiteBoxesIndice]
-                        .getElementsByClassName('piece')[0].outerHTML);
-                };
-            }
-            if (moveBishopWhite(kingWhitePosition, boxes[i].id) &&
-                boxes[i].getElementsByClassName('piece').length == 1) {
-                if (boxes[i].getElementsByClassName('piece')[0]
-                    .outerHTML.indexOf("queen-black") !== -1 ||
-                    boxes[i].getElementsByClassName('piece')[0]
-                    .outerHTML.indexOf("bishop-black") !== -1) {
-                    moveIlluminateSquare2(boxes[i].id,
-                        boxes[i].getElementsByClassName('piece')[0].outerHTML);
-                    moveIlluminateSquare3(boxes[kingWhiteBoxesIndice].id,
-                        boxes[kingWhiteBoxesIndice]
-                        .getElementsByClassName('piece')[0].outerHTML);
-                };
-            }
-            if (moveRookWhite(kingWhitePosition, boxes[i].id) &&
-                boxes[i].getElementsByClassName('piece').length == 1) {
-                if (boxes[i].getElementsByClassName('piece')[0]
-                    .outerHTML.indexOf("queen-black") !== -1 ||
-                    boxes[i].getElementsByClassName('piece')[0]
-                    .outerHTML.indexOf("rook-black") !== -1) {
-                    moveIlluminateSquare2(boxes[i].id,
-                        boxes[i].getElementsByClassName('piece')[0].outerHTML);
-                    moveIlluminateSquare3(boxes[kingWhiteBoxesIndice].id,
-                        boxes[kingWhiteBoxesIndice]
-                        .getElementsByClassName('piece')[0].outerHTML);
-                };
-            }
-            if (capturePawnWhite(kingWhitePosition, boxes[i].id) &&
-                boxes[i].getElementsByClassName('piece').length == 1) {
-                if (boxes[i].getElementsByClassName('piece')[0]
-                    .outerHTML.indexOf("pawn-black") !== -1) {
-                    moveIlluminateSquare2(boxes[i].id,
-                        boxes[i].getElementsByClassName('piece')[0].outerHTML);
-                    moveIlluminateSquare3(boxes[kingWhiteBoxesIndice].id,
-                        boxes[kingWhiteBoxesIndice]
-                        .getElementsByClassName('piece')[0].outerHTML);
-                }
-            }
-            if (moveKnightBlack(kingBlackPosition, boxes[i].id) &&
-                boxes[i].getElementsByClassName('piece').length == 1) {
-                if (boxes[i].getElementsByClassName('piece')[0]
-                    .outerHTML.indexOf("knight-white") !== -1) {
-                    moveIlluminateSquare2(boxes[i].id,
-                        boxes[i].getElementsByClassName('piece')[0].outerHTML);
-                    moveIlluminateSquare3(boxes[kingBlackBoxesIndice].id,
-                        boxes[kingBlackBoxesIndice]
-                        .getElementsByClassName('piece')[0].outerHTML);
-                };
-            }
-            if (moveBishopBlack(kingBlackPosition, boxes[i].id) &&
-                boxes[i].getElementsByClassName('piece').length == 1) {
-                if (boxes[i].getElementsByClassName('piece')[0]
-                    .outerHTML.indexOf("queen-white") !== -1 ||
-                    boxes[i].getElementsByClassName('piece')[0]
-                    .outerHTML.indexOf("bishop-white") !== -1) {
-                    moveIlluminateSquare2(boxes[i].id,
-                        boxes[i].getElementsByClassName('piece')[0].outerHTML);
-                    moveIlluminateSquare3(boxes[kingBlackBoxesIndice].id,
-                        boxes[kingBlackBoxesIndice]
-                        .getElementsByClassName('piece')[0].outerHTML);
-                };
-            }
-            if (moveRookBlack(kingBlackPosition, boxes[i].id) &&
-                boxes[i].getElementsByClassName('piece').length == 1) {
-                if (boxes[i].getElementsByClassName('piece')[0]
-                    .outerHTML.indexOf("queen-white") !== -1 ||
-                    boxes[i].getElementsByClassName('piece')[0]
-                    .outerHTML.indexOf("rook-white") !== -1) {
-                    moveIlluminateSquare2(boxes[i].id,
-                        boxes[i].getElementsByClassName('piece')[0].outerHTML);
-                    moveIlluminateSquare3(boxes[kingBlackBoxesIndice].id,
-                        boxes[kingBlackBoxesIndice]
-                        .getElementsByClassName('piece')[0].outerHTML);
-                };
-            }
-            if (capturePawnBlack(kingBlackPosition, boxes[i].id) &&
-                boxes[i].getElementsByClassName('piece').length == 1) {
-                if (boxes[i].getElementsByClassName('piece')[0]
-                    .outerHTML.indexOf("pawn-white") !== -1) {
-                    moveIlluminateSquare2(boxes[i].id,
-                        boxes[i].getElementsByClassName('piece')[0].outerHTML);
-                    moveIlluminateSquare3(boxes[kingBlackBoxesIndice].id,
-                        boxes[kingBlackBoxesIndice]
-                        .getElementsByClassName('piece')[0].outerHTML);
-                }
-            }
-        }
+        kingsOnCheck();
 
         console.log('colorPiece=> ', colorPiece);
         console.log('kingWhitePosition=> ', kingWhitePosition);
         console.log('kingBlackPosition=> ', kingBlackPosition);
+        console.log('whiteInCheck=> ', whiteInCheck);
+        console.log('blackInCheck=> ', blackInCheck);
+
 
         element.classList.add("activeSquare");
 
         resetClickedBoardPieces();
         resetClickedBoard(movePiece1);
         resetClickedBoard(movePiece2);
+        whiteInCheck = false;
+        blackInCheck = false;
         colorPiece = "";
         piece = "";
         piece2 = "";
