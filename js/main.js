@@ -159,6 +159,38 @@ function pieceIntermediateRow(pieceSquare1, pieceSquare2) {
     return (pieceIntermediate);
 }
 
+function pieceMoveInDiagonal(pieceSquare1, pieceSquare2, n) {
+    let columnSign = Math.sign(columnRealDiference(pieceSquare2, pieceSquare1));
+    let rowSign = Math.sign(rowRealDiference(pieceSquare2, pieceSquare1));
+    let limit = n;
+    let pieceSquare3 = pieceSquare2;
+    for (let i = 0; i < limit; i++) {
+        pieceSquare3 = String.fromCharCode(pieceSquare3.charCodeAt(0) + columnSign) +
+            (Number(pieceSquare3.charAt(1)) + rowSign);
+    }
+    return (pieceSquare3);
+}
+
+function pieceMoveInColumn(pieceSquare1, pieceSquare2, n) {
+    let rowSign = Math.sign(rowRealDiference(pieceSquare2, pieceSquare1));
+    let limit = n;
+    let pieceSquare3 = pieceSquare2;
+    for (let i = 0; i < limit; i++) {
+        pieceSquare3 = pieceSquare3.charAt(0) + (Number(pieceSquare3.charAt(1)) + rowSign);
+    }
+    return (pieceSquare3);
+}
+
+function pieceMoveInRow(pieceSquare1, pieceSquare2, n) {
+    let columnSign = Math.sign(columnRealDiference(pieceSquare2, pieceSquare1));
+    let limit = n;
+    let pieceSquare3 = pieceSquare2;
+    for (let i = 0; i < limit; i++) {
+        pieceSquare3 = String.fromCharCode(pieceSquare3.charCodeAt(0) + columnSign) + pieceSquare3.charAt(1);
+    }
+    return (pieceSquare3);
+}
+
 function movePawnWhite(pieceSquare1, pieceSquare2) {
     let pieceSquare3 = pieceSquare1.charAt(0) + 3;
     if (columnEqual(pieceSquare1, pieceSquare2) &&
@@ -582,24 +614,49 @@ function kingWhiteOnCheck(pieceSquare1) {
                 return true;
             };
         }
-        // if (moveBishopWhite(pieceSquare1, boxes[i].id) &&
-        //     boxes[i].getElementsByClassName('piece').length == 1) {
-        //     if (boxes[i].getElementsByClassName('piece')[0]
-        //         .outerHTML.indexOf("queen-black") !== -1 ||
-        //         boxes[i].getElementsByClassName('piece')[0]
-        //         .outerHTML.indexOf("bishop-black") !== -1) {
-        //         return true;
-        //     };
-        // }
-        // if (moveRookWhite(pieceSquare1, boxes[i].id) &&
-        //     boxes[i].getElementsByClassName('piece').length == 1) {
-        //     if (boxes[i].getElementsByClassName('piece')[0]
-        //         .outerHTML.indexOf("queen-black") !== -1 ||
-        //         boxes[i].getElementsByClassName('piece')[0]
-        //         .outerHTML.indexOf("rook-black") !== -1) {
-        //         return true;
-        //     };
-        // }
+        if (pieceSquare1 !== boxes[i].id) {
+            if (moveBishopWhite(pieceSquare1, boxes[i].id) &&
+                boxes[i].getElementsByClassName('piece').length == 1) {
+                if (boxes[i].getElementsByClassName('piece')[0]
+                    .outerHTML.indexOf("queen-black") !== -1 ||
+                    boxes[i].getElementsByClassName('piece')[0]
+                    .outerHTML.indexOf("bishop-black") !== -1) {
+                    return true;
+                };
+            }
+            if (moveRookWhite(pieceSquare1, boxes[i].id) &&
+                boxes[i].getElementsByClassName('piece').length == 1) {
+                if (boxes[i].getElementsByClassName('piece')[0]
+                    .outerHTML.indexOf("queen-black") !== -1 ||
+                    boxes[i].getElementsByClassName('piece')[0]
+                    .outerHTML.indexOf("rook-black") !== -1) {
+                    return true;
+                };
+            }
+        }
+        if (moveBishopWhite(kingWhitePosition, boxes[i].id) &&
+            boxes[i].getElementsByClassName('piece').length == 1) {
+            if (boxes[i].getElementsByClassName('piece')[0]
+                .outerHTML.indexOf("queen-black") !== -1 ||
+                boxes[i].getElementsByClassName('piece')[0]
+                .outerHTML.indexOf("bishop-black") !== -1) {
+                if (pieceSquare1 == pieceMoveInDiagonal(boxes[i].id, kingWhitePosition, 1)) {
+                    return true;
+                };
+            }
+        }
+        if (moveRookWhite(kingWhitePosition, boxes[i].id) &&
+            boxes[i].getElementsByClassName('piece').length == 1) {
+            if (boxes[i].getElementsByClassName('piece')[0]
+                .outerHTML.indexOf("queen-black") !== -1 ||
+                boxes[i].getElementsByClassName('piece')[0]
+                .outerHTML.indexOf("rook-black") !== -1) {
+                if (pieceSquare1 == pieceMoveInRow(boxes[i].id, kingWhitePosition, 1) ||
+                    pieceSquare1 == pieceMoveInColumn(boxes[i].id, kingWhitePosition, 1)) {
+                    return true;
+                };
+            };
+        }
         if (capturePawnWhite(pieceSquare1, boxes[i].id) &&
             boxes[i].getElementsByClassName('piece').length == 1) {
             if (boxes[i].getElementsByClassName('piece')[0]
@@ -627,24 +684,49 @@ function kingBlackOnCheck(pieceSquare1) {
                 return true;
             };
         }
-        // if (moveBishopBlack(pieceSquare1, boxes[i].id) &&
-        //     boxes[i].getElementsByClassName('piece').length == 1) {
-        //     if (boxes[i].getElementsByClassName('piece')[0]
-        //         .outerHTML.indexOf("queen-white") !== -1 ||
-        //         boxes[i].getElementsByClassName('piece')[0]
-        //         .outerHTML.indexOf("bishop-white") !== -1) {
-        //         return true;
-        //     };
-        // }
-        // if (moveRookBlack(pieceSquare1, boxes[i].id) &&
-        //     boxes[i].getElementsByClassName('piece').length == 1) {
-        //     if (boxes[i].getElementsByClassName('piece')[0]
-        //         .outerHTML.indexOf("queen-white") !== -1 ||
-        //         boxes[i].getElementsByClassName('piece')[0]
-        //         .outerHTML.indexOf("rook-white") !== -1) {
-        //         return true;
-        //     };
-        // }
+        if (pieceSquare1 !== boxes[i].id) {
+            if (moveBishopBlack(pieceSquare1, boxes[i].id) &&
+                boxes[i].getElementsByClassName('piece').length == 1) {
+                if (boxes[i].getElementsByClassName('piece')[0]
+                    .outerHTML.indexOf("queen-white") !== -1 ||
+                    boxes[i].getElementsByClassName('piece')[0]
+                    .outerHTML.indexOf("bishop-white") !== -1) {
+                    return true;
+                };
+            }
+            if (moveRookBlack(pieceSquare1, boxes[i].id) &&
+                boxes[i].getElementsByClassName('piece').length == 1) {
+                if (boxes[i].getElementsByClassName('piece')[0]
+                    .outerHTML.indexOf("queen-white") !== -1 ||
+                    boxes[i].getElementsByClassName('piece')[0]
+                    .outerHTML.indexOf("rook-white") !== -1) {
+                    return true;
+                };
+            }
+        }
+        if (moveBishopBlack(kingBlackPosition, boxes[i].id) &&
+            boxes[i].getElementsByClassName('piece').length == 1) {
+            if (boxes[i].getElementsByClassName('piece')[0]
+                .outerHTML.indexOf("queen-white") !== -1 ||
+                boxes[i].getElementsByClassName('piece')[0]
+                .outerHTML.indexOf("bishop-white") !== -1) {
+                if (pieceSquare1 == pieceMoveInDiagonal(boxes[i].id, kingBlackPosition, 1)) {
+                    return true;
+                };
+            };
+        }
+        if (moveRookBlack(kingBlackPosition, boxes[i].id) &&
+            boxes[i].getElementsByClassName('piece').length == 1) {
+            if (boxes[i].getElementsByClassName('piece')[0]
+                .outerHTML.indexOf("queen-white") !== -1 ||
+                boxes[i].getElementsByClassName('piece')[0]
+                .outerHTML.indexOf("rook-white") !== -1) {
+                if (pieceSquare1 == pieceMoveInRow(boxes[i].id, kingBlackPosition, 1) ||
+                    pieceSquare1 == pieceMoveInColumn(boxes[i].id, kingBlackPosition, 1)) {
+                    return true;
+                };
+            };
+        }
         if (capturePawnBlack(pieceSquare1, boxes[i].id) &&
             boxes[i].getElementsByClassName('piece').length == 1) {
             if (boxes[i].getElementsByClassName('piece')[0]
@@ -734,7 +816,6 @@ function boxClick(event) {
             if (document.getElementById(movePiece1).outerHTML.indexOf('square-black') !== -1) {
                 moveActiveSquare2(movePiece1, element.outerHTML);
             };
-            console.log(element.parentElement);
 
             function illuminateAll() {
 
