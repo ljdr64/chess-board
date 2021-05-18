@@ -30,6 +30,7 @@ let letterPieceWhite = "";
 let letterPieceBlack = "";
 let movePieceWhiteNotation = "";
 let movePieceBlackNotation = "";
+let gameMovesPGN = "";
 let gameMovesHTMLTotal = '<div class="moves" id="moveNotation">' +
     '<div class="order-move"><br> </div>' +
     '<div class="move-1"><br> </div>' +
@@ -513,6 +514,15 @@ function gameMovesHTML(pieceSquare1, pieceSquare2) {
         '<div class="move-1">' + letterPieceWhite + pieceSquare1 + '</div>' +
         '<div class="move-2">' + letterPieceBlack + pieceSquare2 + '</div>' +
         '</div>';
+}
+
+function gameMovesWhitePGN(pieceSquare1) {
+    gameMovesPGN = gameMovesPGN +
+        numberMovesWhite + '. ' + letterPieceWhite + pieceSquare1;
+}
+
+function gameMovesBlackPGN(pieceSquare1) {
+    gameMovesPGN = gameMovesPGN + ' ' + letterPieceBlack + pieceSquare1 + ' ';
 }
 
 function kingsOnCheck() {
@@ -1165,6 +1175,7 @@ function boxClick(event) {
             moveWhiteNotation(activateMove);
             movePieceWhiteNotation = activateMove;
             pieceNotation = letterPieceWhite;
+            gameMovesWhitePGN(activateMove);
         }
 
         if (color == 'Black' &&
@@ -1173,10 +1184,10 @@ function boxClick(event) {
             moveBlackNotation(movePieceWhiteNotation, activateMove);
             gameMovesHTMLTotal = gameMovesHTMLTotal +
                 gameMovesHTML(movePieceWhiteNotation, activateMove);
-
+            gameMovesBlackPGN(activateMove);
         }
 
-
+        console.log(gameMovesPGN);
         console.log('colorPiece=> ', colorPiece);
 
         // console.log('kingWhitePosition=> ', kingWhitePosition);
