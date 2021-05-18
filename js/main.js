@@ -24,6 +24,15 @@ let castleQueensideBlackOn = true;
 let movePiece1 = "";
 let movePiece2 = "";
 let colorPiece = "";
+let letterPieceWhite = "";
+let letterPieceBlack = "";
+let movePieceWhiteNotation = "";
+let movePieceBlackNotation = "";
+let gameMovesHTMLTotal = '<div class="moves" id="moveNotation">' +
+    '<div class="order-move"><br> </div>' +
+    '<div class="move-1"><br> </div>' +
+    '<div class="move-2"><br> </div>' +
+    '</div>';
 let piece;
 let piece2;
 let color;
@@ -33,6 +42,8 @@ let oppositeColor2;
 let specialMove1 = "";
 let specialMove2 = "";
 let specialNumberMoves = 0;
+let numberMovesWhite = 0;
+let numberMovesBlack = 0;
 let numberMoves = 0;
 
 function myFunction() {
@@ -474,6 +485,34 @@ function moveActiveSquare2(pieceSquare1, htmlPieceSquare) {
         htmlPieceSquare + '<div class="activeSquare2"></div>';
 }
 
+function moveWhiteNotation(pieceSquare1) {
+    document.getElementById('gameNotation').innerHTML =
+        gameMovesHTMLTotal +
+        '<div class="moves" id="moveNotation">' +
+        '<div class="order-move">' + numberMovesWhite + '</div>' +
+        '<div class="move-1">' + letterPieceWhite + pieceSquare1 + '</div>' +
+        '<div class="move-2"></div>' +
+        '</div>';
+}
+
+function moveBlackNotation(pieceSquare1, pieceSquare2) {
+    document.getElementById('gameNotation').innerHTML =
+        gameMovesHTMLTotal +
+        '<div class="moves" id="moveNotation">' +
+        '<div class="order-move">' + numberMovesWhite + '</div>' +
+        '<div class="move-1">' + letterPieceWhite + pieceSquare1 + '</div>' +
+        '<div class="move-2">' + letterPieceBlack + pieceSquare2 + '</div>' +
+        '</div>';
+}
+
+function gameMovesHTML(pieceSquare1, pieceSquare2) {
+    return '<div class="moves" id="moveNotation">' +
+        '<div class="order-move">' + numberMovesWhite + '</div>' +
+        '<div class="move-1">' + letterPieceWhite + pieceSquare1 + '</div>' +
+        '<div class="move-2">' + letterPieceBlack + pieceSquare2 + '</div>' +
+        '</div>';
+}
+
 function kingsOnCheck() {
     for (let i = 0; i < boxes.length; i++) {
         if (boxes[i].getElementsByClassName('piece').length == 1) {
@@ -906,7 +945,15 @@ function boxClick(event) {
 
     if (clickedSquares == 1) {
         numberMoves = ++numberMoves;
-        movePiece2 = squareId
+        movePiece2 = squareId;
+
+        if (color == 'White') {
+            numberMovesWhite++;
+        }
+
+        if (color == 'Black') {
+            numberMovesBlack++;
+        }
 
         function eliminateAll() {
 
@@ -928,6 +975,9 @@ function boxClick(event) {
                 (capturePawnWhite(movePiece1, movePiece2) &&
                     occupiedSquareBlack() && emptySquare('king-black'))) {
                 movePawnWhiteSquare(movePiece1, movePiece2);
+                if (capturePawnWhite(movePiece1, movePiece2)) {
+                    letterPieceWhite = movePiece1.charAt(0);
+                };
                 if (rowNumber(movePiece1, 2) && rowNumber(movePiece2, 4)) {
                     specialMove1 = movePiece1;
                     specialMove2 = movePiece2;
@@ -938,6 +988,7 @@ function boxClick(event) {
                 numberMoves - specialNumberMoves == 1) {
                 movePawnWhiteSquare(movePiece1, movePiece2);
                 document.getElementById(specialMove2).innerHTML = '';
+                letterPieceWhite = movePiece1.charAt(0);
             }
         }
         if (colorPiece == "knight-white") {
@@ -1001,6 +1052,9 @@ function boxClick(event) {
                 (capturePawnBlack(movePiece1, movePiece2) &&
                     occupiedSquareWhite() && emptySquare('king-white'))) {
                 movePawnBlackSquare(movePiece1, movePiece2);
+                if (capturePawnBlack(movePiece1, movePiece2)) {
+                    letterPieceBlack = movePiece1.charAt(0);
+                };
                 if (rowNumber(movePiece1, 7) && rowNumber(movePiece2, 5)) {
                     specialMove1 = movePiece1;
                     specialMove2 = movePiece2;
@@ -1011,6 +1065,7 @@ function boxClick(event) {
                 numberMoves - specialNumberMoves == 1) {
                 movePawnBlackSquare(movePiece1, movePiece2);
                 document.getElementById(specialMove2).innerHTML = '';
+                letterPieceBlack = movePiece1.charAt(0);
             }
         }
         if (colorPiece == "knight-black") {
@@ -1071,11 +1126,25 @@ function boxClick(event) {
 
         kingsOnCheck();
 
+        if (color == 'White') {
+            moveWhiteNotation(movePiece2);
+            movePieceWhiteNotation = movePiece2;
+        }
+
+        if (color == 'Black') {
+            moveBlackNotation(movePieceWhiteNotation, movePiece2);
+            gameMovesHTMLTotal = gameMovesHTMLTotal +
+                gameMovesHTML(movePieceWhiteNotation, movePiece2);
+
+        }
+
+
         console.log('colorPiece=> ', colorPiece);
-        console.log('kingWhitePosition=> ', kingWhitePosition);
-        console.log('kingBlackPosition=> ', kingBlackPosition);
-        console.log('whiteInCheck=> ', whiteInCheck);
-        console.log('blackInCheck=> ', blackInCheck);
+
+        // console.log('kingWhitePosition=> ', kingWhitePosition);
+        // console.log('kingBlackPosition=> ', kingBlackPosition);
+        // console.log('whiteInCheck=> ', whiteInCheck);
+        // console.log('blackInCheck=> ', blackInCheck);
 
 
         element.classList.add("activeSquare");
@@ -1118,6 +1187,7 @@ function boxClick(event) {
     }
 
     if (element.className.indexOf("pawn-white") > -1) {
+        letterPieceWhite = "";
         colorPiece = "pawn-white";
         piece = "Pawn";
         piece2 = "pawn";
@@ -1128,6 +1198,7 @@ function boxClick(event) {
     }
 
     if (element.className.indexOf("knight-white") > -1) {
+        letterPieceWhite = "N";
         colorPiece = "knight-white";
         piece = "Knight";
         piece2 = "knight";
@@ -1138,6 +1209,7 @@ function boxClick(event) {
     }
 
     if (element.className.indexOf("bishop-white") > -1) {
+        letterPieceWhite = "B";
         colorPiece = "bishop-white";
         piece = "Bishop";
         piece2 = "bishop";
@@ -1148,6 +1220,7 @@ function boxClick(event) {
     }
 
     if (element.className.indexOf("rook-white") > -1) {
+        letterPieceWhite = "R";
         colorPiece = "rook-white";
         piece = "Rook";
         piece2 = "rook";
@@ -1158,6 +1231,7 @@ function boxClick(event) {
     }
 
     if (element.className.indexOf("queen-white") > -1) {
+        letterPieceWhite = "Q";
         colorPiece = "queen-white";
         piece = "Queen";
         piece2 = "queen";
@@ -1168,6 +1242,7 @@ function boxClick(event) {
     }
 
     if (element.className.indexOf("king-white") > -1) {
+        letterPieceWhite = "K";
         colorPiece = "king-white";
         piece = "King";
         piece2 = "king";
@@ -1178,6 +1253,7 @@ function boxClick(event) {
     }
 
     if (element.className.indexOf("pawn-black") > -1) {
+        letterPieceBlack = "";
         colorPiece = "pawn-black";
         piece = "Pawn";
         piece2 = "pawn";
@@ -1188,6 +1264,7 @@ function boxClick(event) {
     }
 
     if (element.className.indexOf("knight-black") > -1) {
+        letterPieceBlack = "N";
         colorPiece = "knight-black";
         piece = "Knight";
         piece2 = "knight";
@@ -1198,6 +1275,7 @@ function boxClick(event) {
     }
 
     if (element.className.indexOf("bishop-black") > -1) {
+        letterPieceBlack = "B";
         colorPiece = "bishop-black";
         piece = "Bishop";
         piece2 = "bishop";
@@ -1208,6 +1286,7 @@ function boxClick(event) {
     }
 
     if (element.className.indexOf("rook-black") > -1) {
+        letterPieceBlack = "R";
         colorPiece = "rook-black";
         piece = "Rook";
         piece2 = "rook";
@@ -1218,6 +1297,7 @@ function boxClick(event) {
     }
 
     if (element.className.indexOf("queen-black") > -1) {
+        letterPieceBlack = "Q";
         colorPiece = "queen-black";
         piece = "Queen";
         piece2 = "queen";
@@ -1228,6 +1308,7 @@ function boxClick(event) {
     }
 
     if (element.className.indexOf("king-black") > -1) {
+        letterPieceBlack = "K";
         colorPiece = "king-black";
         piece = "King";
         piece2 = "king";
