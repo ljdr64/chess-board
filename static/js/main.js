@@ -24,6 +24,8 @@ let castleQueensideBlackOn = true;
 let movePiece1 = "";
 let movePiece2 = "";
 let colorPiece = "";
+let activateMove = "";
+let pieceNotation = "";
 let letterPieceWhite = "";
 let letterPieceBlack = "";
 let movePieceWhiteNotation = "";
@@ -947,14 +949,6 @@ function boxClick(event) {
         numberMoves = ++numberMoves;
         movePiece2 = squareId;
 
-        if (color == 'White') {
-            numberMovesWhite++;
-        }
-
-        if (color == 'Black') {
-            numberMovesBlack++;
-        }
-
         function eliminateAll() {
 
             for (let i = 0; i < boxes.length; i++) {
@@ -976,37 +970,47 @@ function boxClick(event) {
                     occupiedSquareBlack() && emptySquare('king-black'))) {
                 movePawnWhiteSquare(movePiece1, movePiece2);
                 if (capturePawnWhite(movePiece1, movePiece2)) {
-                    letterPieceWhite = movePiece1.charAt(0);
+                    letterPieceWhite = movePiece1.charAt(0) + 'x';
                 };
                 if (rowNumber(movePiece1, 2) && rowNumber(movePiece2, 4)) {
                     specialMove1 = movePiece1;
                     specialMove2 = movePiece2;
                     specialNumberMoves = numberMoves;
-                }
+                };
+                activateMove = movePiece2;
+                numberMovesWhite++;
             }
             if (capturePawnWhiteEnPassant(movePiece1, movePiece2, specialMove1, specialMove2) &&
                 numberMoves - specialNumberMoves == 1) {
                 movePawnWhiteSquare(movePiece1, movePiece2);
                 document.getElementById(specialMove2).innerHTML = '';
-                letterPieceWhite = movePiece1.charAt(0);
+                letterPieceWhite = movePiece1.charAt(0) + 'x';
+                activateMove = movePiece2;
+                numberMovesWhite++;
             }
         }
         if (colorPiece == "knight-white") {
             if (moveKnightWhite(movePiece1, movePiece2) &&
                 emptySquareWhite() && emptySquare('king-black')) {
                 moveKnightWhiteSquare(movePiece1, movePiece2);
+                activateMove = movePiece2;
+                numberMovesWhite++;
             }
         }
         if (colorPiece == "bishop-white") {
             if (moveBishopWhite(movePiece1, movePiece2) &&
                 emptySquareWhite() && emptySquare('king-black')) {
                 moveBishopWhiteSquare(movePiece1, movePiece2);
+                activateMove = movePiece2;
+                numberMovesWhite++;
             }
         }
         if (colorPiece == "rook-white") {
             if (moveRookWhite(movePiece1, movePiece2) &&
                 emptySquareWhite() && emptySquare('king-black')) {
                 moveRookWhiteSquare(movePiece1, movePiece2);
+                activateMove = movePiece2;
+                numberMovesWhite++;
                 if (movePiece1 == 'h1' &&
                     castleWhiteOn) {
                     castleKingsideWhiteOn = false;
@@ -1021,6 +1025,8 @@ function boxClick(event) {
             if (moveQueenWhite(movePiece1, movePiece2) &&
                 emptySquareWhite() && emptySquare('king-black')) {
                 moveQueenWhiteSquare(movePiece1, movePiece2);
+                activateMove = movePiece2;
+                numberMovesWhite++;
             }
         }
         if (colorPiece == "king-white") {
@@ -1028,6 +1034,8 @@ function boxClick(event) {
                 emptySquareWhite() && emptySquare('king-black') &&
                 !kingWhiteOnCheck(movePiece2)) {
                 moveKingWhiteSquare(movePiece1, movePiece2);
+                activateMove = movePiece2;
+                numberMovesWhite++;
                 if (movePiece1 == 'e1' &&
                     castleWhiteOn) {
                     castleWhiteOn = false;
@@ -1038,12 +1046,18 @@ function boxClick(event) {
                 moveRookWhiteSquare('h1', 'f1');
                 moveKingWhiteSquare(movePiece1, movePiece2);
                 castleWhiteOn = false;
+                activateMove = '0-0';
+                letterPieceWhite = '';
+                numberMovesWhite++;
             };
             if (moveCastleQueensideWhite(movePiece1, movePiece2) &&
                 castleQueensideWhiteOn && castleWhiteOn) {
                 moveRookWhiteSquare('a1', 'd1');
                 moveKingWhiteSquare(movePiece1, movePiece2);
                 castleWhiteOn = false;
+                activateMove = '0-0-0';
+                letterPieceWhite = '';
+                numberMovesWhite++;
             }
         }
         if (colorPiece == "pawn-black") {
@@ -1053,37 +1067,47 @@ function boxClick(event) {
                     occupiedSquareWhite() && emptySquare('king-white'))) {
                 movePawnBlackSquare(movePiece1, movePiece2);
                 if (capturePawnBlack(movePiece1, movePiece2)) {
-                    letterPieceBlack = movePiece1.charAt(0);
+                    letterPieceBlack = movePiece1.charAt(0) + 'x';
                 };
                 if (rowNumber(movePiece1, 7) && rowNumber(movePiece2, 5)) {
                     specialMove1 = movePiece1;
                     specialMove2 = movePiece2;
                     specialNumberMoves = numberMoves;
-                }
+                };
+                activateMove = movePiece2;
+                numberMovesBlack++;
             }
             if (capturePawnBlackEnPassant(movePiece1, movePiece2, specialMove1, specialMove2) &&
                 numberMoves - specialNumberMoves == 1) {
                 movePawnBlackSquare(movePiece1, movePiece2);
                 document.getElementById(specialMove2).innerHTML = '';
-                letterPieceBlack = movePiece1.charAt(0);
+                letterPieceBlack = movePiece1.charAt(0) + 'x';
+                activateMove = movePiece2;
+                numberMovesBlack++;
             }
         }
         if (colorPiece == "knight-black") {
             if (moveKnightBlack(movePiece1, movePiece2) &&
                 emptySquareBlack() && emptySquare('king-white')) {
                 moveKnightBlackSquare(movePiece1, movePiece2);
+                activateMove = movePiece2;
+                numberMovesBlack++;
             }
         }
         if (colorPiece == "bishop-black") {
             if (moveBishopBlack(movePiece1, movePiece2) &&
                 emptySquareBlack() && emptySquare('king-white')) {
                 moveBishopBlackSquare(movePiece1, movePiece2);
+                activateMove = movePiece2;
+                numberMovesBlack++;
             }
         }
         if (colorPiece == "rook-black") {
             if (moveRookBlack(movePiece1, movePiece2) &&
                 emptySquareBlack() && emptySquare('king-white')) {
                 moveRookBlackSquare(movePiece1, movePiece2);
+                activateMove = movePiece2;
+                numberMovesBlack++;
                 if (movePiece1 == 'h8' &&
                     castleBlackOn) {
                     castleKingsideBlackOn = false;
@@ -1098,6 +1122,8 @@ function boxClick(event) {
             if (moveQueenBlack(movePiece1, movePiece2) &&
                 emptySquareBlack() && emptySquare('king-white')) {
                 moveQueenBlackSquare(movePiece1, movePiece2);
+                activateMove = movePiece2;
+                numberMovesBlack++;
             }
         }
         if (colorPiece == "king-black") {
@@ -1105,6 +1131,8 @@ function boxClick(event) {
                 emptySquareBlack() && emptySquare('king-white') &&
                 !kingBlackOnCheck(movePiece2)) {
                 moveKingBlackSquare(movePiece1, movePiece2);
+                activateMove = movePiece2;
+                numberMovesBlack++;
                 if (movePiece1 == 'e8' &&
                     castleBlackOn) {
                     castleBlackOn = false;
@@ -1115,26 +1143,36 @@ function boxClick(event) {
                 moveRookBlackSquare('h8', 'f8');
                 moveKingBlackSquare(movePiece1, movePiece2);
                 castleBlackOn = false;
+                activateMove = '0-0';
+                letterPieceBlack = '';
+                numberMovesBlack++;
             };
             if (moveCastleQueensideBlack(movePiece1, movePiece2) &&
                 castleQueensideBlackOn && castleBlackOn) {
                 moveRookBlackSquare('a8', 'd8');
                 moveKingBlackSquare(movePiece1, movePiece2);
                 castleBlackOn = false;
+                activateMove = '0-0-0';
+                letterPieceBlack = '';
+                numberMovesBlack++;
             }
         }
 
         kingsOnCheck();
 
-        if (color == 'White') {
-            moveWhiteNotation(movePiece2);
-            movePieceWhiteNotation = movePiece2;
+        if (color == 'White' &&
+            activateMove !== '') {
+            moveWhiteNotation(activateMove);
+            movePieceWhiteNotation = activateMove;
+            pieceNotation = letterPieceWhite;
         }
 
-        if (color == 'Black') {
-            moveBlackNotation(movePieceWhiteNotation, movePiece2);
+        if (color == 'Black' &&
+            activateMove !== '') {
+            letterPieceWhite = pieceNotation;
+            moveBlackNotation(movePieceWhiteNotation, activateMove);
             gameMovesHTMLTotal = gameMovesHTMLTotal +
-                gameMovesHTML(movePieceWhiteNotation, movePiece2);
+                gameMovesHTML(movePieceWhiteNotation, activateMove);
 
         }
 
@@ -1154,6 +1192,9 @@ function boxClick(event) {
         resetClickedBoard(movePiece2);
         whiteInCheck = false;
         blackInCheck = false;
+        letterPieceWhite = "";
+        letterPieceBlack = "";
+        activateMove = "";
         colorPiece = "";
         piece = "";
         piece2 = "";
